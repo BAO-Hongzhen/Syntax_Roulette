@@ -1,0 +1,10 @@
+# 核心依赖 - 运行main.py必需
+gradio>=4.0.0
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# 可选依赖 - 如果需要连接ComfyUI
+requests>=2.31.0
+
+# 可选依赖 - 如果使用Streamlit版本
+streamlit>=1.28.0
