@@ -1,311 +1,174 @@
-# Syntax Roulette - 快速开始指南
+# 🚀 Quick Start Guide - Syntax Roulette
 
-## 🚀 快速开始（仅需2步）
+Quick reference for getting started with the Syntax Roulette text-to-image generator.
 
-### 第一步：安装依赖
+---
 
-打开终端（PowerShell或命令提示符），运行：
+## 📦 Installation
+
+### Windows
+```bash
+setup_windows.bat
+```
+
+### macOS / Linux
+```bash
+chmod +x setup_macos.sh run_macos.sh
+./setup_macos.sh
+```
+
+**First time**: Downloads ~4GB model (5-15 minutes)
+
+---
+
+## ▶️ Running the App
+
+### Windows
+```bash
+run_windows.bat
+```
+
+### macOS / Linux
+```bash
+./run_macos.sh
+```
+
+Opens at: `http://localhost:7860`
+
+---
+
+## 🎮 How to Use
+
+### 1. Shuffle & Pick Cards 🎴
+- Click **"Shuffle & Pick Cards"**
+- Watch the shuffling animation
+- 5 words selected (one from each category)
+- Edit words if desired
+
+### 2. Generate Sentence 📝
+- Click **"Generate Sentence"**
+- Gets grammatically correct English sentence
+- Example: *"A little baby is carefully studying on a rooftop."*
+
+### 3. Generate Image 🎨
+- (Optional) Adjust settings
+- Click **"Generate Image"**
+- Wait ~30 seconds (Apple Silicon) or ~10 seconds (NVIDIA GPU)
+- View your AI-generated image!
+
+---
+
+## ⚙️ Settings Quick Reference
+
+### Default (Recommended)
+```
+Size: 512x512
+Steps: 25
+Guidance: 7.5
+Time: ~30s (Apple Silicon), ~10s (NVIDIA)
+```
+
+### Faster
+```
+Steps: 15-20
+Guidance: 7.0
+Time: ~15-20s (Apple Silicon)
+```
+
+### Higher Quality
+```
+Steps: 35-40
+Guidance: 8.5
+Time: ~45-50s (Apple Silicon)
+```
+
+---
+
+## 🎯 Word Categories
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| Subject | 30 | boy, cat, robot, wizard |
+| Predicate | 30 | eat, play, fly, dance |
+| Attributive | 30 | big, happy, red, silly |
+| Adverbial | 30 | quickly, carefully, happily |
+| Complement | 30 | a pizza, in the kitchen, on the moon |
+
+**Total: 150 words**
+
+---
+
+## 🔧 Common Issues
+
+### Black Images (macOS)
+✅ Fixed automatically - uses float32 for MPS
+
+### Out of Memory
+- Reduce image size to 384x384 or 256x256
+- Reduce steps to 15-20
+- Restart app
+
+### Slow Generation
+- Reduce steps (15-25 is enough)
+- Check GPU detection in terminal
+
+### Model Won't Load
+- Check internet connection
+- Ensure 10GB free space
+- Rerun setup script
+
+---
+
+## 💡 Tips
+
+1. **Default settings work great** - no need to adjust for most uses
+2. **Edit words** before generating sentence for custom combinations
+3. **Use negative prompts** to avoid unwanted elements (e.g., "blurry, distorted")
+4. **Try different seeds** for variations of the same prompt
+5. **Start with 25 steps** - good balance of speed and quality
+
+---
+
+## 📚 More Info
+
+- **Full Documentation**: See `README.md`
+- **Custom Words**: Edit `word_banks.py`
+- **Technical Details**: Check terminal output
+
+---
+
+## 🆘 Quick Commands
 
 ```bash
-pip install gradio pillow numpy
-```
+# Check Python version
+python --version
 
-### 第二步：启动应用
+# Check if venv is active
+which python
 
-```bash
-python main.py
-```
+# Reinstall dependencies
+pip install -r requirements.txt
 
-应用会自动在浏览器中打开，如果没有自动打开，请访问：
-```
-http://localhost:7860
-```
+# Check GPU (macOS)
+python -c "import torch; print('MPS:', torch.backends.mps.is_available())"
 
----
-
-## 🎨 功能介绍
-
-### 主要功能
-
-1. **文本生图**
-   - 输入描述文字
-   - AI自动生成对应图像
-   - 支持多种艺术风格
-
-2. **快速预设**
-   - 🏞️ 风景：自然景观
-   - 👤 人物：人物肖像
-   - 🐾 动物：可爱动物
-   - 🏛️ 建筑：建筑设计
-   - 🎨 抽象：抽象艺术
-   - 🚀 科幻：科幻场景
-   - ✨ 幻想：奇幻世界
-
-3. **参数控制**
-   - 图像尺寸：256-1024像素
-   - 质量等级：低/中/高/超高
-   - 艺术风格：7种风格可选
-   - 随机种子：控制生成随机性
-
-4. **历史记录**
-   - 自动保存最近20次生成
-   - 可查看历史参数
-   - 一键清空历史
-
----
-
-## 📝 使用示例
-
-### 示例1：生成风景图
-```
-描述：美丽的山水风景，湖泊，夕阳，云彩
-风格：默认
-质量：高
-```
-
-### 示例2：生成人物肖像
-```
-描述：年轻女性肖像，专业摄影，工作室灯光
-风格：写实
-质量：超高
-```
-
-### 示例3：生成动漫风格
-```
-描述：可爱的动漫女孩，大眼睛，彩色头发
-风格：动漫
-质量：高
-```
-
-### 示例4：生成抽象艺术
-```
-描述：彩色几何图形，现代艺术，抽象设计
-风格：油画
-质量：高
+# Check GPU (Windows/Linux)
+python -c "import torch; print('CUDA:', torch.cuda.is_available())"
 ```
 
 ---
 
-## 💡 提示词技巧
+## 🎴 Example Workflow
 
-### ✅ 好的提示词示例
+1. Run: `./run_macos.sh` (or `run_windows.bat`)
+2. Click "Shuffle & Pick Cards"
+3. Click "Generate Sentence"
+4. Click "Generate Image"
+5. Download and share your creation! 🎨
 
-**具体明确：**
-```
-一只橘色的猫咪坐在木制窗台上，温暖的阳光透过窗户照射进来，
-毛发清晰可见，背景是模糊的花园
-```
-
-**添加质量关键词：**
-```
-专业摄影, 高清, 8k, 细节丰富, 最佳质量
-```
-
-**描述光线和氛围：**
-```
-柔和的晨光, 温暖的色调, 电影般的光影效果
-```
-
-### ❌ 避免的写法
-
-- 太简单：`猫`（不够具体）
-- 太复杂：一段很长的故事（太多信息）
-- 矛盾描述：`白天的夜晚`（逻辑矛盾）
+**That's it!** 🎉
 
 ---
 
-## 🎯 各风格特点
+*Need detailed help? See README.md*
 
-| 风格 | 特点 | 适合场景 |
-|------|------|---------|
-| 默认 | 平衡的效果 | 通用场景 |
-| 写实 | 照片级真实感 | 人物、风景、产品 |
-| 动漫 | 日式动漫风格 | 人物、角色设计 |
-| 油画 | 艺术油画质感 | 艺术作品、风景 |
-| 水彩 | 柔和水彩效果 | 温馨场景、插画 |
-| 素描 | 黑白素描风格 | 简洁设计、概念图 |
-| 赛博朋克 | 未来科幻感 | 城市、科技场景 |
-
----
-
-## ⚙️ 参数说明
-
-### 图像尺寸
-- **小尺寸 (256-384)**：生成速度快，预览用
-- **中尺寸 (512-640)**：平衡质量和速度（推荐）
-- **大尺寸 (768-1024)**：高质量，但速度较慢
-
-### 质量等级
-- **低**：快速预览
-- **中**：日常使用
-- **高**：推荐设置
-- **超高**：最佳质量，细节最丰富
-
-### 随机种子
-- **使用随机种子**：每次生成不同结果
-- **固定种子**：可以重现之前的生成结果
-
----
-
-## 🔧 高级功能
-
-### 1. 重现生成结果
-1. 生成图像后，查看详细信息中的种子值
-2. 取消勾选"使用随机种子"
-3. 输入之前的种子值
-4. 使用相同的提示词和参数
-5. 再次生成即可得到相似结果
-
-### 2. 批量生成探索
-1. 固定提示词和其他参数
-2. 勾选"使用随机种子"
-3. 多次点击生成按钮
-4. 在历史记录中对比选择最佳结果
-
-### 3. 负面提示词使用
-在"不想要的元素"中输入：
-```
-模糊, 低质量, 变形, 多余的手指, 不自然的姿势
-```
-
----
-
-## 🎨 创意工作流
-
-### 工作流1：风格探索
-1. 使用相同的描述文字
-2. 依次尝试不同的艺术风格
-3. 对比选择最合适的风格
-4. 在历史记录中查看对比
-
-### 工作流2：细节优化
-1. 从简单描述开始生成
-2. 查看结果，找出不满意的部分
-3. 在描述中添加更多细节
-4. 调整负面提示词
-5. 重新生成直到满意
-
-### 工作流3：尺寸递进
-1. 先用小尺寸(256-384)快速测试
-2. 确定满意的提示词后
-3. 提高到中等尺寸(512)优化
-4. 最后用大尺寸(768-1024)生成最终版本
-
----
-
-## 📱 界面说明
-
-### 左侧面板（创作面板）
-- 描述输入框
-- 快速预设按钮
-- 参数设置滑块
-- 高级选项
-- 生成/清空按钮
-
-### 右侧面板（结果展示）
-- 生成状态提示
-- 图像显示区域
-- 下载按钮
-- 详细信息（提示词、参数等）
-
-### 底部区域
-- 历史记录图库
-- 使用说明
-- 版本信息
-
----
-
-## ❓ 常见问题
-
-### Q1: 如何获得更好的图像质量？
-A: 
-1. 选择"高"或"超高"质量等级
-2. 使用更大的图像尺寸
-3. 提供详细具体的描述
-4. 添加质量关键词（如"高清"、"细节丰富"）
-
-### Q2: 生成的图像不符合预期怎么办？
-A:
-1. 检查描述是否足够具体
-2. 尝试添加负面提示词
-3. 更换艺术风格
-4. 多次生成，在历史记录中选择
-
-### Q3: 如何保存生成的图像？
-A:
-1. 点击图像下方的"📥 下载图像"按钮
-2. 或右键点击图像，选择"图片另存为"
-
-### Q4: 可以商用吗？
-A: 当前为演示模式，如需商用请：
-1. 连接真实的AI生成服务（如ComfyUI）
-2. 确认服务提供商的许可证
-3. 遵守相关法律法规
-
-### Q5: 为什么生成的是彩色渐变图？
-A: 这是演示模式。要获得真实AI生成的图像，需要：
-1. 安装ComfyUI或其他AI图像生成服务
-2. 在代码中配置连接信息
-3. 替换演示生成函数
-
----
-
-## 🔄 更新计划
-
-- [ ] 连接真实AI服务（ComfyUI集成）
-- [ ] 支持图生图功能
-- [ ] 添加更多艺术风格
-- [ ] 批量生成功能
-- [ ] 图像编辑工具
-- [ ] 导出历史记录
-- [ ] 用户配置保存
-
----
-
-## 💻 系统要求
-
-- Python 3.8+
-- 4GB+ RAM
-- 现代浏览器（Chrome/Firefox/Edge推荐）
-- 稳定的网络连接（首次安装依赖时需要）
-
----
-
-## 🆘 获取帮助
-
-如果遇到问题：
-
-1. **检查依赖安装**
-   ```bash
-   pip list | findstr gradio
-   ```
-
-2. **重新安装依赖**
-   ```bash
-   pip uninstall gradio -y
-   pip install gradio
-   ```
-
-3. **查看错误信息**
-   - 运行时的红色错误提示
-   - 浏览器控制台（F12）
-
-4. **重启应用**
-   - 关闭终端
-   - 重新运行 `python main.py`
-
----
-
-## 📄 许可证
-
-本项目遵循项目根目录的许可证文件。
-
----
-
-<div align="center">
-
-**🎨 享受创作的乐趣！**
-
-Made with ❤️ using Gradio
-
-</div>
