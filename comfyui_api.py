@@ -150,7 +150,7 @@ class ComfyUIClient:
             },
             "4": {
                 "inputs": {
-                    "ckpt_name": "sd_xl_base_1.0.safetensors"
+                    "ckpt_name": "majicmixRealistic_v7.safetensors"
                 },
                 "class_type": "CheckpointLoaderSimple"
             },
