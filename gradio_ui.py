@@ -65,7 +65,7 @@ class GradioInterface:
     
     def generate_gif_handler(self, sentence: str, negative_prompt: str,
                            width: int, height: int, num_frames: int, fps: int,
-                           use_comfyui: bool, progress=gr.Progress()) -> Tuple[Optional[str], str]:
+                           progress=gr.Progress()) -> Tuple[Optional[str], str]:
         """
         生成GIF的处理函数
         
@@ -76,7 +76,6 @@ class GradioInterface:
             height: 高度
             num_frames: 帧数
             fps: 帧率
-            use_comfyui: 是否使用ComfyUI
             progress: 进度条
             
         Returns:
@@ -88,55 +87,24 @@ class GradioInterface:
             
             progress(0, desc="准备生成...")
             
-            if use_comfyui:
-                # 使用真实ComfyUI生成
-                progress(0.1, desc="连接ComfyUI...")
-                
-                if not self.comfyui_client.test_connection():
-                    return None, "❌ 无法连接到ComfyUI，请确保ComfyUI正在运行"
-                
-                progress(0.3, desc="提交到生成队列...")
-                
-                gif_path = self.comfyui_client.generate_gif(
-                    prompt=sentence,
-                    negative_prompt=negative_prompt,
-                    width=width,
-                    height=height,
-                    num_frames=num_frames,
-                    fps=fps
-                )
-                
-                if gif_path:
-                    progress(1.0, desc="完成！")
-                    
-                    # 添加到历史记录
-                    self.generation_history.insert(0, {
-                        "sentence": sentence,
-                        "path": gif_path,
-                        "timestamp": time.time()
-                    })
-                    
-                    status = f"""✅ **GIF生成成功！**
-
-📝 **提示词**: {sentence}
-🚫 **负面提示词**: {negative_prompt}
-📐 **尺寸**: {width} x {height}
-🎞️ **帧数**: {num_frames}
-⚡ **帧率**: {fps} FPS
-💾 **保存路径**: {gif_path}
-"""
-                    return gif_path, status
-                else:
-                    return None, "❌ GIF生成失败，请查看终端日志"
+            # 使用ComfyUI生成
+            progress(0.1, desc="连接ComfyUI...")
             
-            else:
-                # 演示模式
-                progress(0.3, desc="演示模式：生成预览...")
-                time.sleep(1)
-                
-                # 创建演示GIF
-                gif_path = self.create_demo_gif(sentence, width, height, num_frames, fps)
-                
+            if not self.comfyui_client.test_connection():
+                return None, "❌ 无法连接到ComfyUI，请确保ComfyUI正在运行"
+            
+            progress(0.3, desc="提交到生成队列...")
+            
+            gif_path = self.comfyui_client.generate_gif(
+                prompt=sentence,
+                negative_prompt=negative_prompt,
+                width=width,
+                height=height,
+                num_frames=num_frames,
+                fps=fps
+            )
+            
+            if gif_path:
                 progress(1.0, desc="完成！")
                 
                 # 添加到历史记录
@@ -146,104 +114,21 @@ class GradioInterface:
                     "timestamp": time.time()
                 })
                 
-                status = f"""✅ **演示GIF生成成功！**
+                status = f"""✅ **GIF生成成功！**
 
-⚠️ **演示模式**: 这是一个预览动图，非真实AI生成
 📝 **提示词**: {sentence}
+🚫 **负面提示词**: {negative_prompt}
+📐 **尺寸**: {width} x {height}
+🎞️ **帧数**: {num_frames}
+⚡ **帧率**: {fps} FPS
 💾 **保存路径**: {gif_path}
-
-💡 **提示**: 勾选"使用ComfyUI"并启动ComfyUI服务以生成真实动图
 """
                 return gif_path, status
+            else:
+                return None, "❌ GIF生成失败，请查看终端日志"
                 
         except Exception as e:
             return None, f"❌ 生成失败: {str(e)}"
-    
-    def create_demo_gif(self, text: str, width: int, height: int, 
-                       num_frames: int, fps: int) -> str:
-        """
-        创建演示GIF
-        
-        Args:
-            text: 文字
-            width: 宽度
-            height: 高度
-            num_frames: 帧数
-            fps: 帧率
-            
-        Returns:
-            GIF文件路径
-        """
-        from PIL import Image, ImageDraw, ImageFont
-        import random
-        
-        frames = []
-        
-        for i in range(num_frames):
-            # 创建新帧
-            img = Image.new('RGB', (width, height), color='white')
-            draw = ImageDraw.Draw(img)
-            
-            # 绘制渐变背景
-            progress = i / num_frames
-            for y in range(height):
-                ratio = y / height
-                color = (
-                    int(100 + 155 * ratio * progress),
-                    int(150 + 105 * (1 - ratio)),
-                    int(200 + 55 * ratio)
-                )
-                draw.line([(0, y), (width, y)], fill=color)
-            
-            # 绘制移动的圆圈
-            circle_x = int(width * progress)
-            circle_y = height // 2 + int(50 * ((i % 8) - 4))
-            circle_radius = 30
-            draw.ellipse(
-                [circle_x - circle_radius, circle_y - circle_radius,
-                 circle_x + circle_radius, circle_y + circle_radius],
-                fill=(255, 200, 0)
-            )
-            
-            # 添加文字
-            try:
-                # 简化文字显示
-                display_text = text[:30] + "..." if len(text) > 30 else text
-                text_bbox = draw.textbbox((0, 0), display_text)
-                text_width = text_bbox[2] - text_bbox[0]
-                text_height = text_bbox[3] - text_bbox[1]
-                
-                text_x = (width - text_width) // 2
-                text_y = height - 60
-                
-                # 背景框
-                padding = 10
-                draw.rectangle(
-                    [text_x - padding, text_y - padding,
-                     text_x + text_width + padding, text_y + text_height + padding],
-                    fill=(0, 0, 0, 200)
-                )
-                
-                draw.text((text_x, text_y), display_text, fill='white')
-            except:
-                pass
-            
-            frames.append(img)
-        
-        # 保存GIF
-        os.makedirs("output", exist_ok=True)
-        timestamp = int(time.time())
-        gif_path = f"output/demo_{timestamp}.gif"
-        
-        frames[0].save(
-            gif_path,
-            save_all=True,
-            append_images=frames[1:],
-            duration=1000 // fps,
-            loop=0
-        )
-        
-        return gif_path
     
     def get_history_gallery(self) -> List[Tuple[str, str]]:
         """获取历史记录"""
@@ -323,12 +208,6 @@ class GradioInterface:
                             num_frames = gr.Slider(4, 32, 16, step=4, label="帧数", info="更多帧更流畅")
                             fps = gr.Slider(4, 24, 8, step=2, label="帧率 (FPS)")
                         
-                        use_comfyui = gr.Checkbox(
-                            label="使用ComfyUI生成（需要本地ComfyUI运行）",
-                            value=False,
-                            info="取消勾选则使用演示模式"
-                        )
-                        
                         generate_gif_btn = gr.Button(
                             "🎬 生成GIF动图",
                             variant="primary",
@@ -366,19 +245,11 @@ class GradioInterface:
                     2. **生成句子**: 点击"随机生成句子"按钮
                     3. **调整参数**: 设置GIF尺寸、帧数等参数
                     4. **生成GIF**: 点击"生成GIF动图"按钮
-                    5. **查看结果**: 等待几秒，GIF会显示在右侧
+                    5. **查看结果**: 等待生成完成，GIF会显示在右侧
                     
-                    ### 两种模式:
-                    
-                    #### 演示模式（默认）
-                    - 不需要ComfyUI
-                    - 生成彩色动画预览
-                    - 快速测试
-                    
-                    #### ComfyUI模式
-                    - 需要本地ComfyUI运行
-                    - 真实AI生成动图
-                    - 高质量输出
+                    ### 前置要求:
+                    - 需要本地ComfyUI正在运行（127.0.0.1:8188）
+                    - 真实AI生成高质量动图
                     
                     ### 启动ComfyUI:
                     ```bash
@@ -405,7 +276,7 @@ class GradioInterface:
                 fn=self.generate_gif_handler,
                 inputs=[
                     sentence_output, negative_prompt,
-                    width, height, num_frames, fps, use_comfyui
+                    width, height, num_frames, fps
                 ],
                 outputs=[gif_output, status_output]
             )

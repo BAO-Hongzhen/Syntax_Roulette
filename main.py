@@ -8,15 +8,9 @@ Syntax Roulette - 主程序
 - gradio_ui.py: Web界面
 """
 
-import sys
-import os
-
-# 添加modules目录到路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'modules'))
-
-from modules.word_bank import WordBank
-from modules.comfyui_api import ComfyUIClient
-from modules.gradio_ui import GradioInterface
+from word_bank import WordBank
+from comfyui_api import ComfyUIClient
+from gradio_ui import GradioInterface
 
 
 def print_banner():
