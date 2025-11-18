@@ -66,7 +66,7 @@ def initialize_components():
     
     # 2. 初始化ComfyUI客户端
     print("🔌 初始化ComfyUI客户端...")
-    comfyui_client = ComfyUIClient(server_address="127.0.0.1:8188")
+    comfyui_client = ComfyUIClient(server_address="127.0.0.1:8000")
     print(f"   服务器地址: {comfyui_client.base_url}")
     print(f"   客户端ID: {comfyui_client.client_id}")
     
