@@ -1,0 +1,13 @@
+# 剪纸大师 (Papercraft Maestro) - 项目依赖包
+
+# 核心依赖
+gradio>=4.0.0
+Pillow>=10.0.0
+requests>=2.31.0
+numpy>=1.24.0
+
+# WebSocket 支持（用于 ComfyUI API）
+websocket-client>=1.6.0
+
+# 图像处理
+opencv-python>=4.8.0
