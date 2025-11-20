@@ -1,422 +1,463 @@
-# 🎴 Syntax Roulette - Card-Style Text-to-Image Generator
+# 🎴 Syntax Roulette - AI Image Generator
 
-An interactive application that generates creative English sentences through card-style word selection and creates AI-generated images using Stable Diffusion.
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Gradio](https://img.shields.io/badge/Gradio-4.0+-orange.svg)](https://gradio.app/)
 
-![Python](https://img.shields.io/badge/python-3.8+-blue)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-green)
+**An interactive web application that creates AI-generated images from randomly selected English words!**
 
----
-
-## ✨ Features
-
-- 🎴 **5 Card Decks** - 150 carefully selected words across 5 syntax categories
-- 🎲 **Shuffle & Pick Animation** - Visual card shuffling with real-time progress
-- 📝 **Smart Grammar** - Automatically generates grammatically correct English sentences
-- 🎨 **AI Image Generation** - Powered by Stable Diffusion 1.5
-- 🖥️ **Cross-Platform** - Windows, macOS (Intel & Apple Silicon), and Linux
-- ⚡ **GPU Acceleration** - Auto-detection of NVIDIA CUDA, Apple MPS, or CPU fallback
-- 🌐 **User-Friendly Web UI** - Clean Gradio interface
-- 📊 **Real-time Progress** - Clear status updates during generation
+Shuffle card decks, pick words from 5 syntax categories, generate creative sentences, and watch as AI transforms them into stunning images using Stable Diffusion.
 
 ---
 
-## 🚀 Quick Start
+## 📸 What Does It Do?
 
-### Windows
+1. **🎴 Shuffle & Pick Cards**: Click a button to shuffle virtual card decks and randomly pick words from 5 categories
+2. **📝 Build Sentences**: Automatically generate grammatically correct English sentences
+3. **🎨 Generate AI Images**: Transform your sentence into beautiful AI-generated artwork
+4. **💾 Save History**: Keep track of all your creations
 
+Perfect for: Creative writing, English learning, art generation, or just having fun!
+
+---
+
+## ✨ Key Features
+
+### 🎴 **150 Curated Words**
+- 5 Syntax Categories (30 words each):
+  - **Subject**: People, animals, characters (e.g., cat, robot, wizard)
+  - **Predicate**: Action verbs (e.g., dance, fly, paint)
+  - **Attributive**: Descriptive adjectives (e.g., happy, giant, mysterious)
+  - **Adverbial**: Manner adverbs (e.g., quickly, gracefully, wildly)
+  - **Complement**: Objects & places (e.g., a pizza, in the forest, under the moon)
+
+### 🎨 **AI-Powered Image Generation**
+- Uses **Stable Diffusion 1.5** for high-quality image generation
+- Automatic GPU detection (NVIDIA CUDA, Apple Silicon MPS, or CPU)
+- Real-time progress tracking with visual updates
+- Customizable generation parameters (steps, guidance, resolution)
+
+### 🌐 **User-Friendly Interface**
+- Clean, modern web interface (no coding required!)
+- Animated card shuffling with visual feedback
+- History gallery to browse past generations
+- Helpful tooltips and documentation
+
+### 🖥️ **Cross-Platform Support**
+- ✅ **Windows** (Windows 10/11)
+- ✅ **macOS** (Intel & Apple Silicon)
+- ✅ **Linux** (Ubuntu, Debian, etc.)
+
+---
+
+## 🚀 Quick Start Guide
+
+### For Complete Beginners
+
+Don't worry if you've never used Python before! Just follow these simple steps:
+
+#### **Step 1: Install Python**
+
+**Windows:**
+1. Visit [python.org/downloads](https://www.python.org/downloads/)
+2. Download **Python 3.11** (or newer)
+3. Run the installer
+4. ⚠️ **IMPORTANT**: Check ✅ "Add Python to PATH" before clicking Install
+
+**macOS:**
+1. Visit [python.org/downloads](https://www.python.org/downloads/)
+2. Download **Python 3.11** (or newer)
+3. Run the installer and follow the prompts
+
+**Linux:**
 ```bash
-# Setup (first time only)
-setup_windows.bat
-
-# Run application
-run_windows.bat
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
 ```
 
-### macOS / Linux
+#### **Step 2: Download This Project**
 
+**Option A - Using Git (Recommended):**
 ```bash
-# Setup (first time only)
+git clone https://github.com/BAO-Hongzhen/Syntax_Roulette.git
+cd Syntax_Roulette
+```
+
+**Option B - Download ZIP:**
+1. Click the green "Code" button on GitHub
+2. Select "Download ZIP"
+3. Extract the ZIP file
+4. Open Terminal/Command Prompt and navigate to the folder:
+   ```bash
+   cd path/to/Syntax_Roulette
+   ```
+
+#### **Step 3: Run Setup (One Time Only)**
+
+**Windows:**
+```bash
+setup_windows.bat
+```
+Just double-click `setup_windows.bat` or run it in Command Prompt.
+
+**macOS/Linux:**
+```bash
 chmod +x setup_macos.sh run_macos.sh
 ./setup_macos.sh
+```
 
-# Run application
+This will:
+- ✅ Create a virtual environment
+- ✅ Install all required packages
+- ✅ Download AI models (~4GB, takes 5-15 minutes on first run)
+
+#### **Step 4: Start the Application**
+
+**Windows:**
+```bash
+run_windows.bat
+```
+Double-click `run_windows.bat` or run it in Command Prompt.
+
+**macOS/Linux:**
+```bash
 ./run_macos.sh
 ```
 
-The web interface will open automatically at `http://localhost:7860`
+The web interface will automatically open in your browser at:
+```
+http://localhost:7860
+```
 
-**First run**: Downloads the Stable Diffusion model (~4GB, 5-15 minutes). Subsequent runs start instantly.
+If it doesn't open automatically, just copy that URL into your browser!
 
 ---
 
-## 📋 Requirements
+## 📖 How to Use the App
 
-### Minimum
-- Python 3.8+
-- 4GB RAM
-- 10GB disk space (for AI model)
-- Internet connection (first-time setup only)
+### Basic Workflow
 
-### Recommended
-- Python 3.10+
-- 16GB RAM
-- GPU: NVIDIA (6GB+ VRAM) or Apple Silicon (M1/M2/M3)
+1. **🎴 Shuffle Cards**
+   - Click "🎴 Shuffle & Pick Cards"
+   - Watch as the app shuffles virtual decks and picks random words
+   - See your selected words appear in 5 boxes
 
----
+2. **✏️ Customize (Optional)**
+   - Don't like a word? Just type a new one in any box!
+   - Edit any category to personalize your sentence
 
-## 🎮 How to Use
+3. **📝 Generate Sentence**
+   - Click "📝 Generate Sentence"
+   - The app creates a grammatically correct English sentence
+   - Example: *"A happy robot is quickly dancing in a magical garden."*
 
-### Step 1: Shuffle & Pick Cards 🎴
+4. **🎨 Generate Image**
+   - Click "🎨 Generate Image"
+   - Watch the progress bar as AI creates your image
+   - **First time**: Takes 5-15 minutes to download models
+   - **Subsequent runs**: Takes 30-60 seconds per image
 
-Click **"Shuffle & Pick Cards"** to randomly select words from 5 syntax categories:
+5. **💾 View History**
+   - All your creations are saved automatically
+   - Click "📚 Generation History" to see past images
+   - Each image shows the seed number for reproducibility
 
-| Category | Role | Examples |
-|----------|------|----------|
-| **Subject** (主语) | Who/what does the action | boy, girl, cat, dog, robot, wizard |
-| **Predicate** (谓语) | The action/verb | eat, drink, play, dance, fly, swim |
-| **Attributive** (定语) | Describes the subject | big, small, happy, silly, red, blue |
-| **Adverbial** (状语) | How the action is done | quickly, carefully, happily, slowly |
-| **Complement** (补语) | Objects/places | a pizza, in the kitchen, on the moon |
+### Advanced Settings
 
-Each deck contains **30 words** - total **150 words**.
+Click "⚙️ Image Generation Settings" to customize:
 
-Watch the shuffling animation as cards are picked!
-
-### Step 2: Generate Sentence 📝
-
-Click **"Generate Sentence"** to combine words into a grammatically correct English sentence.
-
-**Sentence Structure:**
-```
-[Article] [Attributive] [Subject] is [Adverbial] [Predicate-ing] [Complement]
-```
-
-**Example outputs:**
-```
-"A little baby is carefully studying on a rooftop."
-"A crazy dog is slowly swimming in the bathtub."
-"A tiny bird is quickly flying on a cloud in the sky."
-```
-
-You can edit any word before generating the sentence!
-
-### Step 3: Create Image 🎨
-
-1. **(Optional) Adjust settings:**
-   - **Image Size**: 256x256 to 768x768
-   - **Inference Steps**: 15-50 (default: 25)
-   - **Guidance Scale**: 5-15 (default: 7.5)
-   - **Negative Prompt**: Things to avoid
-
-2. Click **"Generate Image"**
-
-3. Watch real-time progress bar
-
-4. View and download your AI-generated image!
+- **Negative Prompt**: Tell AI what NOT to include (e.g., "blurry, ugly")
+- **Width/Height**: Image size (512x512 recommended)
+- **Inference Steps**: 
+  - 20 steps = Fast (30 seconds)
+  - 35 steps = High quality (60 seconds)
+- **Guidance Scale**: How strictly to follow prompt (7.5 recommended)
+- **Random Seed**: Uncheck to reproduce exact same image
 
 ---
 
-## ⚙️ Image Generation Settings
+## 🛠️ System Requirements
 
-### Default Settings (Optimized for Speed & Quality)
+### Minimum Requirements
+- **OS**: Windows 10+, macOS 10.14+, or Linux
+- **Python**: 3.8 or higher (3.11 recommended)
+- **RAM**: 8 GB (16 GB recommended)
+- **Storage**: 10 GB free space (for models)
+- **Internet**: Required for initial model download
 
-```
-Size: 512x512
-Steps: 25
-Guidance: 7.5
-Negative: blurry, bad quality, distorted, ugly, deformed
-```
+### Recommended for Best Performance
+- **GPU**: NVIDIA GPU with 6GB+ VRAM, or Apple Silicon Mac
+- **RAM**: 16 GB or more
+- **Storage**: SSD with 15 GB free space
 
-**Performance:**
-- NVIDIA GPU: ~10 seconds
-- Apple Silicon: ~30 seconds  
-- CPU: ~2-3 minutes
-
-### Preset Configurations
-
-#### ⚡ Fastest (15-20 seconds on Apple Silicon)
-```
-Steps: 15-20
-Guidance: 7.0
-Size: 512x512
-```
-
-#### 💎 High Quality (45-50 seconds on Apple Silicon)
-```
-Steps: 35-40
-Guidance: 8.5
-Size: 512x512
-```
-
-#### 🎨 Maximum Quality (80-100 seconds on Apple Silicon)
-```
-Steps: 50
-Guidance: 9.0
-Size: 768x768
-```
+### GPU Support
+The app automatically detects and uses:
+- ✅ **NVIDIA GPU** (CUDA) - Windows/Linux
+- ✅ **Apple Silicon** (MPS) - M1/M2/M3 Macs
+- ✅ **CPU Fallback** - Works on any computer (slower)
 
 ---
 
-## 🔧 Troubleshooting
-
-### Black Images on macOS
-✅ **Fixed automatically** - The app uses `float32` precision for MPS devices.
-
-### Out of Memory
-- Reduce image size (try 384x384 or 256x256)
-- Reduce inference steps (try 15-20)
-- Restart the application
-
-### Slow Generation
-- Use fewer steps (15-25 is usually sufficient)
-- Reduce image size if needed
-- Check if GPU is being detected (see terminal output)
-
-### Model Not Loading
-- Ensure stable internet connection for first download
-- Check available disk space (need ~10GB)
-- Try rerunning setup script
-
-### Dependencies Issue
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
----
-
-## 🎯 Word Banks
-
-Each category contains **30 everyday words** designed to create amusing and creative combinations!
-
-### Subject (30 words)
-People, animals, and characters:
-```
-boy, girl, man, woman, baby, child, grandma, grandpa, teacher, doctor,
-chef, artist, dancer, singer, cat, dog, bird, fish, elephant, monkey,
-rabbit, penguin, lion, robot, alien, ghost, wizard, princess, pirate, ninja
-```
-
-### Predicate (30 words)
-Base form verbs (actions):
-```
-eat, drink, sleep, walk, run, jump, fly, swim, crawl, climb,
-play, dance, sing, read, write, draw, paint, cook, bake, build,
-ride, drive, throw, catch, kick, hug, kiss, teach, study, fight
-```
-
-### Attributive (30 words)
-Descriptive adjectives:
-```
-big, small, tiny, huge, giant, little, red, blue, green, yellow,
-pink, purple, orange, black, white, happy, sad, angry, silly, funny,
-crazy, smart, brave, lazy, shy, beautiful, ugly, old, young, golden
-```
-
-### Adverbial (30 words)
-Manner adverbs:
-```
-quickly, slowly, fast, rapidly, gradually, carefully, carelessly, quietly,
-loudly, gently, roughly, smoothly, awkwardly, happily, sadly, angrily,
-joyfully, nervously, calmly, excitedly, elegantly, clumsily, gracefully,
-secretly, openly, suddenly, continuously, wildly, softly, proudly
-```
-
-### Complement (30 words)
-Objects and places:
-```
-a pizza, a cake, a ball, a guitar, a phone, a car, a bicycle, a book,
-an umbrella, a balloon, a flower, in the kitchen, in the bathroom,
-in the bedroom, at school, in the bathtub, at home, in the park,
-on the beach, in the garden, under a tree, beside a river, on the street,
-at the zoo, on a cloud in the sky, on the moon, in outer space,
-on a rooftop, flying in the sky, in the forest
-```
-
-**Example Combinations:**
-- 🏀🛁 "A small boy is quickly playing a ball in the bathtub"
-- 🍕🌙 "A silly cat is happily eating a pizza on the moon"
-- 🚀☁️ "A brave pirate is wildly riding flying in the sky"
-
----
-
-## 💻 Project Structure
+## 📁 Project Structure
 
 ```
 Syntax_Roulette/
-├── main.py                 # Main application and Gradio UI
-├── word_banks.py          # Word categories and selection logic
-├── image_generator.py     # Stable Diffusion integration
-├── requirements.txt       # Python dependencies
-├── setup_windows.bat      # Windows setup script
-├── setup_macos.sh         # macOS/Linux setup script
-├── run_windows.bat        # Windows run script
-├── run_macos.sh           # macOS/Linux run script
-├── README.md              # Main documentation (this file)
-└── QUICK_START_GUIDE.md   # Quick reference guide
+│
+├── 📄 README.md                    # This file
+├── 📄 QUICK_START.md              # Quick reference guide
+├── 📄 DOCUMENTATION_SUMMARY.md    # Technical documentation
+│
+├── 🐍 main.py                     # Main application
+├── 🐍 word_banks.py              # Word categories (150 words)
+├── 🐍 image_generator.py         # AI image generation
+│
+├── 📦 requirements.txt            # Python dependencies
+│
+├── 🪟 setup_windows.bat          # Windows setup script
+├── 🪟 run_windows.bat            # Windows run script
+│
+├── 🍎 setup_macos.sh             # macOS/Linux setup script
+├── 🍎 run_macos.sh               # macOS/Linux run script
+│
+├── 📁 output/                     # Generated images (auto-created)
+├── 📁 venv/                       # Virtual environment (auto-created)
+└── 📁 .git/                       # Git repository files
 ```
 
 ---
 
-## ❓ FAQ
+## ❓ Troubleshooting
 
-**Q: Do I need an internet connection?**  
-A: Yes for first-time setup (model download ~4GB). Afterwards, works completely offline.
+### Common Issues
 
-**Q: How long does image generation take?**  
-A: Depends on hardware:
-- NVIDIA GPU: 5-15 seconds
-- Apple Silicon: 20-40 seconds
-- CPU: 2-5 minutes
+#### **Problem: "Python is not recognized"**
+**Solution**: 
+- Reinstall Python and check ✅ "Add Python to PATH"
+- Or add Python manually to PATH (Google: "add python to path [your OS]")
 
-**Q: Can I add my own words?**  
-A: Yes! Edit `word_banks.py` and add words to any category list. Each list should remain around 30 words for best variety.
-
-**Q: Why does the first run take so long?**  
-A: The Stable Diffusion model (~4GB) needs to be downloaded once. It's cached locally for future use.
-
-**Q: Can I use a different AI model?**  
-A: Yes! Edit `image_generator.py` and change `self.model_id` to any compatible Stable Diffusion model from Hugging Face.
-
-**Q: Does this work without a GPU?**  
-A: Yes, it automatically falls back to CPU mode. Image generation will be slower but fully functional.
-
-**Q: Why are some generated images not perfect?**  
-A: AI image generation is probabilistic. Try:
-- Adjusting guidance scale (7-9 works best)
-- Increasing inference steps (30-40 for better quality)
-- Adding specific negative prompts
-- Regenerating with a different seed
-
----
-
-## 🛠️ Advanced Usage
-
-### Custom Words
-Edit `word_banks.py` to customize word banks:
-```python
-self.subject = [
-    "your", "custom", "words", "here"
-]
-```
-
-### Check GPU Status
+#### **Problem: Setup script fails**
+**Solution**:
 ```bash
-# macOS - Check MPS availability
-python -c "import torch; print('MPS Available:', torch.backends.mps.is_available())"
-
-# Windows/Linux - Check CUDA availability  
-python -c "import torch; print('CUDA Available:', torch.cuda.is_available())"
-```
-
-### Manual Setup (Alternative)
-```bash
-# Create virtual environment
+# Try manual installation
 python -m venv venv
 
-# Activate virtual environment
 # Windows:
 venv\Scripts\activate
 # macOS/Linux:
 source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Run application
-python main.py
 ```
+
+#### **Problem: "Out of memory" error**
+**Solution**:
+- Reduce image size to 256x256 or 384x384
+- Reduce inference steps to 20
+- Close other applications
+- Restart your computer
+
+#### **Problem: Very slow generation**
+**Solution**:
+- This is normal on CPU (can take 2-5 minutes)
+- Consider using a GPU if available
+- Reduce image size and steps for faster results
+
+#### **Problem: macOS "command not found"**
+**Solution**:
+```bash
+chmod +x setup_macos.sh run_macos.sh
+./setup_macos.sh
+```
+
+#### **Problem: Windows "Access Denied"**
+**Solution**:
+- Right-click on `.bat` files
+- Select "Run as Administrator"
+
+#### **Problem: Black images on macOS**
+**Solution**:
+- This is automatically handled for Apple Silicon
+- If issues persist, update to latest macOS version
+
+### Getting Help
+
+1. **Check Documentation**: Read `QUICK_START.md` and `DOCUMENTATION_SUMMARY.md`
+2. **Search Issues**: Visit the [GitHub Issues](https://github.com/BAO-Hongzhen/Syntax_Roulette/issues) page
+3. **Ask Questions**: Open a new issue with:
+   - Your operating system
+   - Python version (`python --version`)
+   - Error messages (copy full text)
+   - Steps you've tried
 
 ---
 
-## 🎓 Technical Details
+## 🎓 Usage Tips
 
-### Technologies Used
-- **Python 3.8+** - Programming language
-- **Gradio** - Web UI framework
-- **PyTorch** - Deep learning framework
-- **Diffusers** - Hugging Face Stable Diffusion library
-- **Pillow** - Image processing
+### Creating Better Images
 
-### GPU Support
-- **NVIDIA CUDA** - Windows/Linux with NVIDIA GPUs
-- **Apple MPS** - macOS with Apple Silicon (M1/M2/M3)
-- **CPU Fallback** - Works on any system (slower)
+1. **Be Specific**: More details = better results
+   - ❌ "cat"
+   - ✅ "fluffy orange cat sitting on a velvet cushion"
 
-### Grammar Rules
-The app implements proper English grammar rules:
-- **Article selection**: "a" vs "an" based on vowel sounds
-- **Gerund formation**: Converts verbs to -ing form (e.g., study→studying, run→running)
-- **Continuous tense**: "is [adverb] [verb-ing]" structure
-- **Sentence capitalization**: First letter uppercase, ends with period
+2. **Use Style Keywords**: Add artistic styles
+   - "photorealistic"
+   - "oil painting"
+   - "anime style"
+   - "watercolor"
+   - "3D render"
+
+3. **Negative Prompts**: List what you DON'T want
+   - "blurry, low quality, distorted, disfigured"
+   - "extra limbs, mutated, bad anatomy"
+
+4. **Experiment with Settings**:
+   - More steps (30-40) = Better quality, slower
+   - Higher guidance (10-12) = Follows prompt more strictly
+   - Random seed = Get different variations
+
+### Example Sentences
+
+Here are some great example sentences:
+
+1. *"A majestic dragon gracefully flies over ancient mountains at sunset."*
+2. *"The wise wizard carefully creates magical crystals in a mystical forest."*
+3. *"A cute robot happily dances with colorful balloons in a futuristic city."*
+4. *"The brave knight quickly rides through dangerous caverns under the moon."*
+5. *"A tiny fairy gently paints beautiful flowers in an enchanted garden."*
+
+---
+
+## 🔧 Advanced Configuration
+
+### Changing AI Models
+
+To use a different Stable Diffusion model:
+
+1. Open `image_generator.py`
+2. Find line ~22:
+   ```python
+   self.model_id = "runwayml/stable-diffusion-v1-5"
+   ```
+3. Replace with your preferred model:
+   ```python
+   self.model_id = "stabilityai/stable-diffusion-2-1"
+   ```
+
+Popular models:
+- `runwayml/stable-diffusion-v1-5` (default, best compatibility)
+- `stabilityai/stable-diffusion-2-1` (newer, higher quality)
+- `dreamlike-art/dreamlike-photoreal-2.0` (photorealistic)
+
+### Adding Custom Words
+
+To add your own words:
+
+1. Open `word_banks.py`
+2. Find the category you want to edit (e.g., `self.subject`)
+3. Add words to the list (keep 30 words per category)
+4. Save and restart the application
+
+### Performance Tuning
+
+Edit these values in the web interface settings:
+
+- **Fast Mode**: 256x256, 20 steps, 7.0 guidance (~15 seconds)
+- **Balanced**: 512x512, 25 steps, 7.5 guidance (~30 seconds)
+- **Quality Mode**: 768x768, 35 steps, 9.0 guidance (~90 seconds)
+
+---
+
+## 📝 Technical Details
+
+### Dependencies
+
+Main packages (automatically installed):
+- `gradio` - Web interface
+- `torch` - Deep learning framework
+- `diffusers` - Stable Diffusion pipeline
+- `transformers` - AI model support
+- `Pillow` - Image processing
+- `accelerate` - GPU optimization
+
+### GPU Acceleration
+
+The application automatically detects your hardware:
+
+```python
+# NVIDIA GPU (Windows/Linux)
+if torch.cuda.is_available():
+    device = "cuda"
+    
+# Apple Silicon (M1/M2/M3 Macs)
+elif torch.backends.mps.is_available():
+    device = "mps"
+    
+# CPU Fallback
+else:
+    device = "cpu"
+```
+
+### Platform-Specific Optimizations
+
+- **Windows/NVIDIA**: Uses `torch.float16` for memory efficiency
+- **macOS/Apple Silicon**: Uses `torch.float32` (required for MPS)
+- **CPU**: Uses `torch.float32` with special attention mechanisms
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome! You can:
-- Add more words to word banks
-- Improve UI/UX design
-- Add new features (e.g., save/load presets)
-- Optimize performance
-- Fix bugs
-- Improve documentation
+Contributions are welcome! Here's how:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Ideas for Contributions
+
+- Add more word categories
+- Improve sentence generation logic
+- Support for more languages
+- Additional AI models
+- UI/UX improvements
+- Performance optimizations
 
 ---
 
-## 📄 License
+## 📜 License
 
-**MIT License** - Free to use, modify, and distribute.
-
-**Note:** Stable Diffusion model has its own license (CreativeML Open RAIL-M). See [Hugging Face](https://huggingface.co/runwayml/stable-diffusion-v1-5) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🆘 Support
+## 🙏 Acknowledgments
 
-**Getting Help:**
-1. Check this README
-2. Review `QUICK_START_GUIDE.md`
-3. Check terminal output for error messages
-4. Ensure virtual environment is activated
-5. Verify all dependencies are installed
-
-**Useful Commands:**
-```bash
-# Check Python version
-python --version
-
-# Check if virtual environment is active
-which python  # Should show venv/bin/python
-
-# Reinstall dependencies
-pip install -r requirements.txt
-
-# Check PyTorch installation
-python -c "import torch; print(torch.__version__)"
-```
+- **Stable Diffusion** by Stability AI - Core image generation
+- **Gradio** - Web interface framework
+- **Hugging Face** - AI model hosting and diffusers library
+- **PyTorch** - Deep learning framework
 
 ---
 
-<div align="center">
+## 📮 Contact
 
-## 🎉 Ready to Create!
-
-**Shuffle cards, craft sentences, generate art!**
-
-```bash
-# Windows
-run_windows.bat
-
-# macOS/Linux
-./run_macos.sh
-```
-
-🎴 **Happy Creating!** 🎨
+- **GitHub**: [BAO-Hongzhen](https://github.com/BAO-Hongzhen)
+- **Project**: [Syntax_Roulette](https://github.com/BAO-Hongzhen/Syntax_Roulette)
+- **Issues**: [Report a bug](https://github.com/BAO-Hongzhen/Syntax_Roulette/issues)
 
 ---
 
-*Made with ❤️ using Python, Gradio & Stable Diffusion*
+## 🎉 Happy Creating!
 
-</div>
+Thank you for using Syntax Roulette! We hope you create amazing images and have fun exploring the intersection of language and AI art.
+
+**Remember**: The first run takes longer (model download), but subsequent runs start instantly!
+
+---
+
+**Made with ❤️ by the Syntax Roulette Team**
+
+*Last Updated: November 2025*

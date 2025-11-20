@@ -29,11 +29,11 @@ from image_generator import ImageGenerator
 @dataclass
 class RouletteResult:
     """Data class to store roulette spin results"""
-    subject: str = ""        # 主语
-    predicate: str = ""      # 谓语
-    attributive: str = ""    # 定语
-    adverbial: str = ""      # 状语
-    complement: str = ""     # 补语
+    subject: str = ""        # Subject
+    predicate: str = ""      # Predicate/Verb
+    attributive: str = ""    # Attributive/Adjective
+    adverbial: str = ""      # Adverbial/Adverb
+    complement: str = ""     # Complement/Object+Location
 
 
 class SyntaxRouletteApp:
@@ -55,7 +55,6 @@ class SyntaxRouletteApp:
     def shuffle_and_pick_card(self, category: str) -> tuple:
         """
         Shuffle deck and pick a card - with animation frames
-        洗牌并抽牌 - 带动画效果
         
         Args:
             category: Word category (subject/predicate/attributive/adverbial/complement)
@@ -69,7 +68,6 @@ class SyntaxRouletteApp:
     def spin_all_roulettes(self, progress=gr.Progress()) -> Tuple[str, str, str, str, str, str]:
         """
         Shuffle all decks and pick cards with animation
-        洗牌并抽取所有卡片
         
         Returns:
             Tuple of (subject, predicate, attributive, adverbial, complement, status_message)
@@ -79,11 +77,11 @@ class SyntaxRouletteApp:
         
         # 5 categories based on syntax structure
         categories = [
-            ("subject", "👤 Shuffling Subject deck (主语)..."),
-            ("predicate", "⚡ Shuffling Predicate deck (谓语)..."),
-            ("attributive", "🎨 Shuffling Attributive deck (定语)..."),
-            ("adverbial", "💫 Shuffling Adverbial deck (状语)..."),
-            ("complement", "🎯 Shuffling Complement deck (补语)...")
+            ("subject", "👤 Shuffling Subject deck..."),
+            ("predicate", "⚡ Shuffling Predicate deck..."),
+            ("attributive", "🎨 Shuffling Attributive deck..."),
+            ("adverbial", "💫 Shuffling Adverbial deck..."),
+            ("complement", "🎯 Shuffling Complement deck...")
         ]
         
         results = []
@@ -134,17 +132,15 @@ class SyntaxRouletteApp:
                          adverbial: str, complement: str) -> Tuple[str, str]:
         """
         Generate grammatically correct English sentence from syntax components
-        根据句法成分生成语法正确的英文句子
         
         Structure: [Article] [Attributive] [Subject] [Adverbial] [Predicate] [Complement]
-        结构: [冠词] [定语] [主语] [状语] [谓语] [补语]
         
         Args:
-            subject: 主语 (who/what)
-            predicate: 谓语 (action)
-            attributive: 定语 (describing adjective)
-            adverbial: 状语 (how the action is done)
-            complement: 补语 (object/place)
+            subject: Subject (who/what)
+            predicate: Predicate (action/verb)
+            attributive: Attributive (describing adjective)
+            adverbial: Adverbial (how the action is done)
+            complement: Complement (object/place)
             
         Returns:
             Tuple of (enhanced_prompt, status_message)
@@ -197,7 +193,6 @@ class SyntaxRouletteApp:
     def _convert_verb_to_gerund(self, verb: str) -> str:
         """
         Convert base form verb to gerund (-ing form) for continuous tense
-        将动词原型转换为动名词形式（现在进行时）
         
         Rules:
         1. Consonant-Vowel-Consonant (CVC) → double last consonant + ing (run→running)
@@ -379,7 +374,7 @@ def create_gradio_interface() -> gr.Blocks:
             3. 📝 Click "Generate Sentence" to create an enhanced prompt
             4. 🎨 Click "Generate Image" to create an AI image (watch real-time progress!)
             
-            **5 Syntax Categories:** Subject (主语) | Predicate (谓语) | Attributive (定语) | Adverbial (状语) | Complement (补语)
+            **5 Syntax Categories:** Subject | Predicate | Attributive | Adverbial | Complement
             """
         )
         
@@ -402,27 +397,27 @@ def create_gradio_interface() -> gr.Blocks:
                     
                     with gr.Row():
                         subject_output = gr.Textbox(
-                            label="Subject - 主语", 
+                            label="Subject", 
                             placeholder="e.g., cat, boy, robot"
                         )
                         predicate_output = gr.Textbox(
-                            label="Predicate - 谓语", 
+                            label="Predicate", 
                             placeholder="e.g., eats, runs, plays"
                         )
                     
                     with gr.Row():
                         attributive_output = gr.Textbox(
-                            label="Attributive - 定语", 
+                            label="Attributive", 
                             placeholder="e.g., big, happy, red"
                         )
                         adverbial_output = gr.Textbox(
-                            label="Adverbial - 状语", 
+                            label="Adverbial", 
                             placeholder="e.g., quickly, happily"
                         )
                     
                     with gr.Row():
                         complement_output = gr.Textbox(
-                            label="Complement - 补语", 
+                            label="Complement", 
                             placeholder="e.g., a pizza, in the kitchen",
                             show_copy_button=True
                         )

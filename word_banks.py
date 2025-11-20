@@ -1,7 +1,6 @@
 """
 Word Banks Module - Syntax Roulette
-Organized by Chinese grammar structure: Subject, Predicate, Attributive, Adverbial, Complement
-主语、谓语、定语、状语、补语
+Organized by syntax categories: Subject, Predicate, Attributive, Adverbial, Complement
 
 Each category contains exactly 30 carefully selected words.
 """
@@ -13,11 +12,11 @@ import random
 class WordBanks:
     """
     Word bank manager with 5 categories based on syntax roles:
-    - Subject (主语): Who/what performs the action
-    - Predicate (谓语): The action/verb
-    - Attributive (定语): Adjectives describing the subject
-    - Adverbial (状语): Adverbs describing how the action is done
-    - Complement (补语): Objects and places that complete the sentence
+    - Subject: Who/what performs the action
+    - Predicate: The action/verb
+    - Attributive: Adjectives describing the subject
+    - Adverbial: Adverbs describing how the action is done
+    - Complement: Objects and places that complete the sentence
     """
     
     def __init__(self):
@@ -27,7 +26,7 @@ class WordBanks:
     def _initialize_word_banks(self):
         """Set up 5 word categories with 30 words each"""
         
-        # Subject (主语) - 30 nouns: people, animals, characters
+        # Subject - 30 nouns: people, animals, characters
         self.subject = [
             # People (14)
             "boy", "girl", "man", "woman", "baby", "child",
@@ -43,7 +42,7 @@ class WordBanks:
             "princess", "pirate", "ninja"
         ]
         
-        # Predicate (谓语) - 30 verbs: base form (原型动词)
+        # Predicate - 30 verbs: base form
         self.predicate = [
             # Basic actions
             "eat", "drink", "sleep", "walk", "run",
@@ -58,7 +57,7 @@ class WordBanks:
             "hug", "kiss", "teach", "study", "fight"
         ]
         
-        # Attributive (定语) - 30 adjectives: describing words
+        # Attributive - 30 adjectives: describing words
         self.attributive = [
             # Size
             "big", "small", "tiny", "huge", "giant", "little",
@@ -75,7 +74,7 @@ class WordBanks:
             "beautiful", "ugly", "old", "young"
         ]
         
-        # Adverbial (状语) - 30 adverbs: manner of action
+        # Adverbial - 30 adverbs: manner of action
         self.adverbial = [
             # Speed (5)
             "quickly", "slowly", "fast", "rapidly", "gradually",
@@ -94,7 +93,7 @@ class WordBanks:
             "wildly", "softly", "proudly"
         ]
         
-        # Complement (补语) - 30 words: objects and places (more specific for better AI generation)
+        # Complement - 30 words: objects and places (more specific for better AI generation)
         self.complement = [
             # Objects (11)
             "a pizza", "a cake", "a ball", "a guitar",
@@ -196,25 +195,16 @@ if __name__ == "__main__":
     
     print("\nWord Bank Statistics:")
     print("-" * 70)
-    print(f"{'Category':<20} {'Chinese':<15} {'Count':<10}")
+    print(f"{'Category':<20} {'Count':<10}")
     print("-" * 70)
-    
-    categories_cn = {
-        "subject": "主语",
-        "predicate": "谓语",
-        "attributive": "定语",
-        "adverbial": "状语",
-        "complement": "补语"
-    }
     
     total_words = 0
     for category, count in stats.items():
-        cn_name = categories_cn.get(category, "")
-        print(f"{category:<20} {cn_name:<15} {count:<10} words")
+        print(f"{category:<20} {count:<10} words")
         total_words += count
     
     print("-" * 70)
-    print(f"{'TOTAL':<20} {'总计':<15} {total_words:<10} words")
+    print(f"{'TOTAL':<20} {total_words:<10} words")
     print("\n" + "=" * 70)
     
     # Show sample from each category
@@ -223,8 +213,7 @@ if __name__ == "__main__":
     for category_name in stats.keys():
         words = wb.get_category(category_name)
         sample = ", ".join(words[:8])
-        cn_name = categories_cn.get(category_name, "")
-        print(f"{category_name:<15} ({cn_name}): {sample}...")
+        print(f"{category_name:<15}: {sample}...")
     
     print("\n" + "=" * 70)
     print("Example sentences:")
