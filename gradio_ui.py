@@ -63,23 +63,21 @@ class GradioInterface:
         except Exception as e:
             return "", f"❌ 生成失败: {str(e)}"
     
-    def generate_gif_handler(self, sentence: str, negative_prompt: str,
-                           width: int, height: int, num_frames: int, fps: int,
-                           progress=gr.Progress()) -> Tuple[Optional[str], str]:
+    def generate_image_handler(self, sentence: str, negative_prompt: str,
+                              width: int, height: int,
+                              progress=gr.Progress()) -> Tuple[Optional[str], str]:
         """
-        生成GIF的处理函数
+        生成图片的处理函数
         
         Args:
             sentence: 句子（提示词）
             negative_prompt: 负面提示词
             width: 宽度
             height: 高度
-            num_frames: 帧数
-            fps: 帧率
             progress: 进度条
             
         Returns:
-            (GIF路径, 状态信息)
+            (图片路径, 状态信息)
         """
         try:
             if not sentence or sentence.strip() == "":
@@ -95,37 +93,33 @@ class GradioInterface:
             
             progress(0.3, desc="提交到生成队列...")
             
-            gif_path = self.comfyui_client.generate_gif(
+            image_path = self.comfyui_client.generate_image(
                 prompt=sentence,
                 negative_prompt=negative_prompt,
                 width=width,
-                height=height,
-                num_frames=num_frames,
-                fps=fps
+                height=height
             )
             
-            if gif_path:
+            if image_path:
                 progress(1.0, desc="完成！")
                 
                 # 添加到历史记录
                 self.generation_history.insert(0, {
                     "sentence": sentence,
-                    "path": gif_path,
+                    "path": image_path,
                     "timestamp": time.time()
                 })
                 
-                status = f"""✅ **GIF生成成功！**
+                status = f"""✅ **图片生成成功！**
 
 📝 **提示词**: {sentence}
 🚫 **负面提示词**: {negative_prompt}
 📐 **尺寸**: {width} x {height}
-🎞️ **帧数**: {num_frames}
-⚡ **帧率**: {fps} FPS
-💾 **保存路径**: {gif_path}
+💾 **保存路径**: {image_path}
 """
-                return gif_path, status
+                return image_path, status
             else:
-                return None, "❌ GIF生成失败，请查看终端日志"
+                return None, "❌ 图片生成失败，请查看终端日志"
                 
         except Exception as e:
             return None, f"❌ 生成失败: {str(e)}"
@@ -141,14 +135,14 @@ class GradioInterface:
         Returns:
             Gradio Blocks应用
         """
-        with gr.Blocks(title="Syntax Roulette - 句子转GIF动图", theme=gr.themes.Soft()) as app:
+        with gr.Blocks(title="Syntax Roulette - 句子生成图片", theme=gr.themes.Soft()) as app:
             
             gr.Markdown(
                 """
                 # 🎲 Syntax Roulette - 语法轮盘
-                ## 随机生成句子，AI创作GIF动图
+                ## 随机生成句子，AI创作图片
                 
-                **玩法**: 从词库随机抽取单词 → 组成句子 → AI生成动态GIF
+                **玩法**: 从词库随机抽取单词 → 组成句子 → AI生成图片
                 """
             )
             
@@ -186,9 +180,9 @@ class GradioInterface:
                         stats_text = "\n".join([f"- **{k}**: {v}个" for k, v in stats.items()])
                         gr.Markdown(stats_text)
                 
-                # 右侧：GIF生成
+                # 右侧：图片生成
                 with gr.Column(scale=1):
-                    gr.Markdown("## 🎨 步骤2: 生成GIF动图")
+                    gr.Markdown("## 🎨 步骤2: 生成图片")
                     
                     with gr.Group():
                         gr.Markdown("### 生成参数")
@@ -201,23 +195,19 @@ class GradioInterface:
                         )
                         
                         with gr.Row():
-                            width = gr.Slider(256, 1024, 512, step=64, label="宽度")
-                            height = gr.Slider(256, 1024, 512, step=64, label="高度")
+                            width = gr.Slider(256, 1024, 768, step=64, label="宽度")
+                            height = gr.Slider(256, 1024, 768, step=64, label="高度")
                         
-                        with gr.Row():
-                            num_frames = gr.Slider(4, 32, 16, step=4, label="帧数", info="更多帧更流畅")
-                            fps = gr.Slider(4, 24, 8, step=2, label="帧率 (FPS)")
-                        
-                        generate_gif_btn = gr.Button(
-                            "🎬 生成GIF动图",
+                        generate_image_btn = gr.Button(
+                            "🎨 生成图片",
                             variant="primary",
                             size="lg"
                         )
                     
                     status_output = gr.Markdown("⏳ 等待生成...")
                     
-                    gif_output = gr.Image(
-                        label="生成的GIF",
+                    image_output = gr.Image(
+                        label="生成的图片",
                         type="filepath",
                         height=400
                     )
@@ -228,7 +218,7 @@ class GradioInterface:
                     refresh_history_btn = gr.Button("🔄 刷新历史", size="sm")
                 
                 history_gallery = gr.Gallery(
-                    label="历史GIF",
+                    label="历史图片",
                     columns=4,
                     rows=2,
                     height=400
@@ -243,13 +233,14 @@ class GradioInterface:
                     ### 基本流程:
                     1. **选择句式**: 选择简单或详细句式模板
                     2. **生成句子**: 点击"随机生成句子"按钮
-                    3. **调整参数**: 设置GIF尺寸、帧数等参数
-                    4. **生成GIF**: 点击"生成GIF动图"按钮
-                    5. **查看结果**: 等待生成完成，GIF会显示在右侧
+                    3. **调整参数**: 设置图片尺寸等参数
+                    4. **生成图片**: 点击"生成图片"按钮
+                    5. **查看结果**: 等待生成完成，图片会显示在右侧
                     
                     ### 前置要求:
                     - 需要本地ComfyUI正在运行（127.0.0.1:8188）
-                    - 真实AI生成高质量动图
+                    - 使用Syntax_Roulette.json工作流
+                    - 真实AI生成高质量图片
                     
                     ### 启动ComfyUI:
                     ```bash
@@ -259,9 +250,8 @@ class GradioInterface:
                     
                     ### 提示:
                     - 🎲 每次点击生成不同的句子
-                    - 📐 建议尺寸: 512x512
-                    - 🎞️ 建议帧数: 16帧
-                    - ⚡ 建议帧率: 8 FPS
+                    - 📐 建议尺寸: 768x768
+                    - 🎨 使用majicmixRealistic_v7模型
                     """
                 )
             
@@ -272,13 +262,13 @@ class GradioInterface:
                 outputs=[sentence_output, sentence_details]
             )
             
-            generate_gif_btn.click(
-                fn=self.generate_gif_handler,
+            generate_image_btn.click(
+                fn=self.generate_image_handler,
                 inputs=[
                     sentence_output, negative_prompt,
-                    width, height, num_frames, fps
+                    width, height
                 ],
-                outputs=[gif_output, status_output]
+                outputs=[image_output, status_output]
             )
             
             refresh_history_btn.click(
