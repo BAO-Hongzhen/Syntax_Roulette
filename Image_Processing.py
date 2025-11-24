@@ -36,20 +36,30 @@ def remove_white_background(image: Image.Image, threshold: int = 240) -> Image.I
     return Image.fromarray(img_array, 'RGBA')
 
 
-def convert_to_red(image: Image.Image) -> Image.Image:
-    """将图片所有像素转换为纯红色，保留alpha通道"""
+def convert_to_red(image: Image.Image, color: tuple = (255, 0, 0), opacity: float = 1.0) -> Image.Image:
+    """
+    将图片所有像素转换为指定颜色，保留alpha通道并设置透明度
+    
+    Args:
+        image: 输入图片
+        color: RGB颜色元组，默认为(255, 0, 0) = 纯红色
+        opacity: 透明度，0.0-1.0，默认为1.0 (完全不透明)
+    """
     if image.mode != 'RGBA':
         image = image.convert('RGBA')
     
     img_array = np.array(image)
     a = img_array[:, :, 3]
     
-    # 将所有非透明像素设为纯红色（255, 0, 0）
+    # 将所有非透明像素设为指定颜色
     non_transparent = a > 0
     
-    img_array[:, :, 0] = np.where(non_transparent, 255, 0)
-    img_array[:, :, 1] = 0
-    img_array[:, :, 2] = 0
+    img_array[:, :, 0] = np.where(non_transparent, color[0], 0)  # R
+    img_array[:, :, 1] = np.where(non_transparent, color[1], 0)  # G
+    img_array[:, :, 2] = np.where(non_transparent, color[2], 0)  # B
+    
+    # 调整透明度：将原alpha值乘以opacity
+    img_array[:, :, 3] = np.where(non_transparent, (a * opacity).astype(np.uint8), 0)
     
     return Image.fromarray(img_array, 'RGBA')
 

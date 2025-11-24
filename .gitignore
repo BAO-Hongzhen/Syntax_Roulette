@@ -25,6 +25,10 @@ image_generated/*.png
 image_generated/*.jpg
 image_generated/*.jpeg
 image_generated/*.gif
+image_in_scene/*.png
+image_in_scene/*.jpg
+image_in_scene/*.jpeg
+image_in_scene/*.gif
 uploads/*
 downloads/
 

@@ -200,14 +200,74 @@ async function downloadImage() {
 /**
  * 渲染到场景（切换到 UI_3）
  */
-function renderInScene() {
+async function renderInScene() {
     if (!currentImageUrl) {
         alert('⚠️ 没有可渲染的剪纸图案！');
         return;
     }
     
     console.log('🎬 切换到场景渲染页面');
+    console.log('📝 当前图片URL:', currentImageUrl);
+    
+    // 切换到场景页面
     switchToScenePage();
+    
+    // 为每个场景生成合成图片
+    await generateAllSceneComposites();
+}
+
+/**
+ * 为所有场景生成合成图片
+ */
+async function generateAllSceneComposites() {
+    const scenes = ['window', 'wall', 'door'];
+    
+    for (const scene of scenes) {
+        try {
+            console.log(`🔄 正在生成 ${scene} 场景合成图...`);
+            
+            const response = await fetch('/api/render_scene', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    papercut_image: currentImageUrl,
+                    scene_type: scene
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                console.log(`✅ ${scene} 场景合成成功:`, data.scene_image_url);
+                
+                // 更新场景预览图
+                const overlay = document.getElementById(`papercut-overlay-${scene}`);
+                const preview = document.getElementById(`scene-preview-${scene}`);
+                
+                if (overlay && preview) {
+                    // 隐藏叠加层，改为显示合成后的完整图片
+                    overlay.style.display = 'none';
+                    
+                    // 更新背景为合成图
+                    const bgImg = preview.querySelector('.scene-bg');
+                    if (bgImg) {
+                        bgImg.src = data.scene_image_url;
+                    }
+                    
+                    // 保存合成图URL供下载使用
+                    preview.dataset.compositeUrl = data.scene_image_url;
+                }
+            } else {
+                console.error(`❌ ${scene} 场景合成失败:`, data.message);
+            }
+        } catch (error) {
+            console.error(`❌ ${scene} 场景合成出错:`, error);
+        }
+    }
+    
+    console.log('✅ 所有场景合成完成');
 }
 
 /**
@@ -239,16 +299,30 @@ async function downloadSceneImage(scene) {
     try {
         console.log(`📥 开始下载 ${scene} 场景图片`);
         
-        // 使用 html2canvas 库来截图（需要在 HTML 中引入）
-        // 这里我们简化处理，直接下载剪纸图片
-        const link = document.createElement('a');
-        link.href = currentImageUrl;
-        link.download = `papercut_${scene}_${Date.now()}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // 获取合成图URL
+        const compositeUrl = preview.dataset.compositeUrl;
         
-        console.log(`✅ ${scene} 场景图片下载成功`);
+        if (compositeUrl) {
+            // 下载合成后的场景图
+            const link = document.createElement('a');
+            link.href = compositeUrl;
+            link.download = `papercut_scene_${scene}_${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`✅ ${scene} 场景图片下载成功`);
+        } else {
+            // 降级：下载原始剪纸图片
+            const link = document.createElement('a');
+            link.href = currentImageUrl;
+            link.download = `papercut_${scene}_${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`⚠️ 下载原始剪纸图片（场景合成图不可用）`);
+        }
     } catch (error) {
         console.error(`❌ 下载 ${scene} 场景失败:`, error);
         alert('❌ 下载失败，请重试');
