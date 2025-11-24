@@ -148,8 +148,8 @@ def _generate_with_comfyui(prompt: str, scene_type: str, scene_image_path: str =
         
         # 第1步：生成初始图像
         steps_info.append("⏳ 步骤 1/5: 调用 ComfyUI Flux 模型生成图像...")
-        first_part = "A vibrant red Chinese paper-cutting art style, traditional folk art, intricate silhouette design, symmetrical pattern"
-        second_part = "complex Chinese patterns, stand proudly among the swirling clouds and stylized clouds, pure white background, bold traditional design, high quality, detailed"
+        first_part = "A vibrant red Chinese paper"
+        second_part = "complex Chinese patterns, stand proudly among the swirling clouds and stylized clouds. The background is pure white, emphasizing a bold traditional design"
         
         result = client.generate_image(
             first_part=first_part,

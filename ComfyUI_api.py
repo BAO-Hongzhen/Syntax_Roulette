@@ -130,11 +130,11 @@ class FluxComfyUI_Generator:
         """
         url = f"http://{self.server_address}/prompt"
         
-        # 保存调试信息
-        debug_file = 'debug_prompt.json'
-        with open(debug_file, 'w', encoding='utf-8') as f:
-            json.dump({"prompt": prompt, "client_id": self.client_id}, f, indent=2, ensure_ascii=False)
-        print(f"📝 调试信息已保存: {debug_file}")
+        # 保存调试信息（可选 - 仅用于开发调试）
+        # debug_file = 'debug_prompt.json'
+        # with open(debug_file, 'w', encoding='utf-8') as f:
+        #     json.dump({"prompt": prompt, "client_id": self.client_id}, f, indent=2, ensure_ascii=False)
+        # print(f"📝 调试信息已保存: {debug_file}")
         
         # 发送请求
         response = requests.post(url, json={"prompt": prompt, "client_id": self.client_id})
