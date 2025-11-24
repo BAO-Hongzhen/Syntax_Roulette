@@ -26,10 +26,12 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 限制上传文件大小 16MB
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['OUTPUT_FOLDER'] = 'output'
+app.config['GENERATED_FOLDER'] = 'image_generated'
 
 # 确保必要的文件夹存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
+os.makedirs(app.config['GENERATED_FOLDER'], exist_ok=True)
 
 
 @app.route('/')
@@ -166,8 +168,21 @@ def _generate_with_comfyui(prompt: str, scene_type: str, scene_image_path: str =
                 'steps': steps_info
             }
         
-        generated_image_path = result['filename']
-        generated_image = Image.open(generated_image_path)
+        # 将ComfyUI生成的原始图片移动到 image_generated 文件夹
+        original_path = result['filename']
+        generated_image = Image.open(original_path)
+        
+        timestamp = int(time.time())
+        generated_filename = f"generated_{timestamp}.png"
+        generated_image_path = os.path.join(app.config['GENERATED_FOLDER'], generated_filename)
+        generated_image.save(generated_image_path)
+        
+        # 删除临时文件（如果需要）
+        if os.path.exists(original_path) and original_path != generated_image_path:
+            try:
+                os.remove(original_path)
+            except:
+                pass
         
         # 第2步：去饱和
         steps_info.append("⏳ 步骤 2/5: 去饱和处理...")
@@ -185,8 +200,7 @@ def _generate_with_comfyui(prompt: str, scene_type: str, scene_image_path: str =
         steps_info.append("⏳ 步骤 5/5: 转换为剪纸红色...")
         processed_image = convert_to_red(processed_image)
         
-        # 保存最终结果
-        timestamp = int(time.time())
+        # 保存最终结果到 output 文件夹
         output_filename = f"papercut_{timestamp}.png"
         output_path = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
         processed_image.save(output_path)
@@ -197,7 +211,7 @@ def _generate_with_comfyui(prompt: str, scene_type: str, scene_image_path: str =
             'success': True,
             'message': '✅ 剪纸图案生成成功！',
             'image_url': f'/output/{output_filename}',
-            'original_image': f'/output/original_{timestamp}.png',
+            'original_image': f'/generated/{generated_filename}',
             'prompt': prompt,
             'scene_type': scene_type,
             'steps': steps_info,
@@ -262,10 +276,21 @@ def _generate_placeholder(prompt: str, scene_type: str):
 @app.route('/output/<filename>')
 def serve_output(filename):
     """
-    提供生成的图片文件
+    提供处理后的图片文件
     """
     return send_file(
         os.path.join(app.config['OUTPUT_FOLDER'], filename),
+        mimetype='image/png'
+    )
+
+
+@app.route('/generated/<filename>')
+def serve_generated(filename):
+    """
+    提供ComfyUI生成的原始图片文件
+    """
+    return send_file(
+        os.path.join(app.config['GENERATED_FOLDER'], filename),
         mimetype='image/png'
     )
 
