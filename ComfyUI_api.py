@@ -22,10 +22,15 @@ class FluxComfyUI_Generator:
         """
         self.server_address = server_address
         self.client_id = str(uuid.uuid4())
+        self._workflow_template = None  # 缓存工作流模板
         print(f"✅ 初始化 ComfyUI 客户端: {server_address}")
     
     def load_workflow_template(self) -> Dict[str, Any]:
-        """加载 API 格式的工作流模板"""
+        """加载 API 格式的工作流模板（带缓存）"""
+        # 如果已经加载过，直接返回缓存
+        if self._workflow_template is not None:
+            return self._workflow_template.copy()  # 返回副本避免被修改
+        
         workflow_path = 'ComfyUI_Workflow/paper_cut.json'
         
         if not os.path.exists(workflow_path):
@@ -34,10 +39,10 @@ class FluxComfyUI_Generator:
             )
         
         with open(workflow_path, 'r', encoding='utf-8') as f:
-            workflow = json.load(f)
+            self._workflow_template = json.load(f)
         
-        print(f"✅ 工作流加载成功: {len(workflow)} 个节点")
-        return workflow
+        print(f"✅ 工作流加载成功: {len(self._workflow_template)} 个节点（已缓存）")
+        return self._workflow_template.copy()
     
     def replace_prompts_in_workflow(self, 
                                   workflow: Dict[str, Any], 

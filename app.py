@@ -35,6 +35,17 @@ os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 os.makedirs(app.config['GENERATED_FOLDER'], exist_ok=True)
 os.makedirs(app.config['SCENE_FOLDER'], exist_ok=True)
 
+# 全局ComfyUI生成器实例（复用连接和工作流）
+_comfyui_client = None
+
+def get_comfyui_client():
+    """获取全局ComfyUI客户端实例（单例模式）"""
+    global _comfyui_client
+    if _comfyui_client is None and MODULES_AVAILABLE:
+        _comfyui_client = FluxComfyUI_Generator()
+        print("✅ 全局 ComfyUI 客户端已初始化")
+    return _comfyui_client
+
 
 @app.route('/')
 def index():
@@ -136,9 +147,16 @@ def _generate_with_comfyui(prompt: str, scene_type: str, scene_image_path: str =
     steps_info = []
     
     try:
-        # 初始化 ComfyUI 客户端
-        steps_info.append("🎨 初始化 ComfyUI 客户端...")
-        client = FluxComfyUI_Generator()
+        # 获取全局 ComfyUI 客户端（复用实例）
+        steps_info.append("🎨 连接 ComfyUI 服务...")
+        client = get_comfyui_client()
+        
+        if client is None:
+            return {
+                'success': False,
+                'message': '❌ ComfyUI 模块未加载',
+                'steps': steps_info
+            }
         
         # 测试连接
         if not client.test_connection():
@@ -558,7 +576,9 @@ def shutdown():
 def _check_comfyui_connection():
     """检查 ComfyUI 连接状态"""
     try:
-        client = FluxComfyUI_Generator()
+        client = get_comfyui_client()
+        if client is None:
+            return False
         return client.test_connection()
     except:
         return False
