@@ -25,31 +25,31 @@ pip install -r requirements_flask.txt
 
 为确保工作流成功运行，您需要下载以下模型：
 
-flux1-dev-fp8.safetensors
+- flux1-dev-fp8.safetensors
 
 下载链接：https://huggingface.co/Kijai/flux-fp8/blob/main/flux1-dev-fp8.safetensors
 
 部署位置：ComfyUI所在位置/models/diffusion_models
 
-clip_l.safetensors
+- clip_l.safetensors
 
 下载链接：https://huggingface.co/comfyanonymous/flux_text_encoders/blob/main/clip_l.safetensors
 
 部署位置：ComfyUI所在位置/models/clip
 
-t5xxl_fp8_e4m3fn.safetensors
+- t5xxl_fp8_e4m3fn.safetensors
 
 下载链接：https://huggingface.co/comfyanonymous/flux_text_encoders/blob/main/t5xxl_fp8_e4m3fn.safetensors
 
 部署位置：ComfyUI所在位置/models/clip
 
-ae.safetensors
+- ae.safetensors
 
 下载链接：https://huggingface.co/lovis93/testllm/blob/ed9cf1af7465cebca4649157f118e331cf2a084f/ae.safetensors
 
 部署位置：ComfyUI所在位置/models/VAE
 
-大觉新春剪纸_V1.safetensors
+- 大觉新春剪纸_V1.safetensors
 
 下载链接：https://www.liblib.art/modelinfo/8714482561d4481d96113ae95e539e28?from=search&versionUuid=a69bec3ddfec4d0bae33c567001fd04f
 
