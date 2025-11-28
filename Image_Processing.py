@@ -5,6 +5,7 @@
 import os
 from PIL import Image, ImageEnhance
 import numpy as np
+import time
 
 
 def desaturate_image(image: Image.Image) -> Image.Image:
@@ -62,6 +63,52 @@ def convert_to_red(image: Image.Image, color: tuple = (255, 0, 0), opacity: floa
     img_array[:, :, 3] = np.where(non_transparent, (a * opacity).astype(np.uint8), 0)
     
     return Image.fromarray(img_array, 'RGBA')
+
+
+def process_image_for_papercut(image_path: str) -> str:
+    """
+    完整的剪纸图像处理流程
+    
+    Args:
+        image_path: 原始图片路径
+        
+    Returns:
+        str: 处理后的图片路径
+    """
+    try:
+        # 加载图片
+        image = Image.open(image_path)
+        
+        # 步骤1: 去饱和
+        image = desaturate_image(image)
+        
+        # 步骤2: 增强对比度 (factor=3.0)
+        image = increase_contrast(image, factor=3.0)
+        
+        # 步骤3: 抠除白色背景 (threshold=230)
+        image = remove_white_background(image, threshold=230)
+        
+        # 步骤4: 转换为红色
+        image = convert_to_red(image)
+        
+        # 确定输出路径
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        output_dir = os.path.join(base_dir, "output")
+        if not os.path.exists(output_dir):
+            # 尝试在当前目录下找 output
+            output_dir = os.path.join(os.getcwd(), "output")
+            os.makedirs(output_dir, exist_ok=True)
+            
+        timestamp = int(time.time())
+        output_filename = f"papercut_{timestamp}.png"
+        output_path = os.path.join(output_dir, output_filename)
+        
+        image.save(output_path, 'PNG')
+        return output_path
+        
+    except Exception as e:
+        print(f"Error processing image: {e}")
+        return None
 
 
 def main():

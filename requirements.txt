@@ -1,12 +1,14 @@
 # 剪纸大师 (Papercraft Maestro) - Python 依赖
 
-# Flask Web 框架
+# Web 框架
+streamlit
 Flask==3.0.0
 Werkzeug==3.0.1
 
 # 图像处理
 Pillow==10.1.0
+numpy
 
-# ComfyUI 相关（可选，用于真实 AI 生成）
-# requests==2.31.0
-# websocket-client==1.6.1
+# ComfyUI 相关
+requests==2.31.0
+websocket-client==1.6.1
