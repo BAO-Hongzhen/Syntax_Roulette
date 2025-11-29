@@ -1,3 +1,15 @@
+这是一个为您修正后的 `README.md` 文件。
+
+**修改说明：**
+
+1.  **恢复了贡献者栏目**：完全保留了您提供的 `contrib.rocks` 动态头像代码，未做任何修改。
+2.  **保留了核心技术解析**：整合了 `Image_Processing.py` 和 `ComfyUI_api.py` 的技术细节说明。
+3.  **保持无 Emoji 风格**：严格遵循您提供的“无 Emoji”文本风格。
+
+您可以直接复制以下内容：
+
+-----
+
 # 剪纸大师 (Papercraft Maestro)
 
 **Papercraft Maestro** 是一个基于 AI 技术的中国传统剪纸艺术生成平台。本项目采用 **Streamlit** 构建交互式前端，结合 **Flux 图像生成模型** 与传统的图像处理算法，能够将用户简单的创意描述瞬间转化为精美的红色剪纸图案，并提供多种场景的模拟展示。
@@ -20,6 +32,27 @@
   * **前端**: Streamlit (Python Web Framework)
   * **后端/AI**: ComfyUI (API Mode) + Flux.1-dev 模型 + LoRA
   * **图像处理**: Pillow (PIL), NumPy
+
+## 核心技术解析
+
+本项目通过两个核心模块实现了从 AI 生成到最终视觉呈现的自动化流程：
+
+### 1\. 图像后期处理 (Image\_Processing.py)
+
+该模块利用 **Pillow (PIL)** 和 **NumPy** 对 AI 生成的初始图像进行一系列计算机视觉处理，以模拟真实的剪纸质感：
+
+  * **去饱和与对比度增强**: 使用 `ImageEnhance` 对生成的图像进行去色处理，并大幅提升对比度，确保剪纸纹理的清晰度。
+  * **智能去底 (Alpha Masking)**: 将图像转换为 NumPy 数组，通过像素级阈值（Thresholding）检测白色背景区域，并将其 Alpha 通道设为透明，实现高精度的自动抠图。
+  * **矢量化着色**: 实现了 `convert_to_red` 函数，将非透明的像素点统一映射为标准的“中国红”色值，同时保留原有的透明度层级，使边缘过渡自然。
+  * **场景合成**: 使用 **Lanczos 重采样**算法高质量缩放剪纸图像，根据预设的坐标系统将剪纸精确贴合到窗户、墙壁或门等背景图中。
+
+### 2\. ComfyUI 自动化接口 (ComfyUI\_api.py)
+
+该模块封装了与 ComfyUI 后端的通信逻辑，实现了零配置的连接体验：
+
+  * **端口自动发现机制**: 内置了 `find_comfyui_address` 函数，利用 Python 的 `socket` 库快速扫描本地常用端口（包括 Web 版默认的 8188、桌面版的 8000 以及其他备用端口）。一旦 TCP 连接建立，立即发送 HTTP 请求验证 `/system_stats` 端点，确保服务可用。
+  * **动态工作流注入**: 系统加载 JSON 格式的工作流模板，在内存中动态修改 `CLIPTextEncodeFlux` 节点的输入参数，将用户的提示词与内置风格词（Prompt Template）拼接。
+  * **任务队列管理**: 通过 API 将生成任务推送到 ComfyUI 队列，并实时轮询生成状态，直到获取最终生成的图像数据流。
 
 ## 快速开始
 
@@ -120,6 +153,16 @@ A: Flux 是一个较大的模型，对硬件资源要求较高。
 
 **Q: 我需要写 "Chinese paper cut style" 吗？**
 A: **不需要**。我们的系统已经内置了最佳的风格化提示词（"A vibrant red Chinese paper..."）。你只需要告诉系统“画什么”（例如 "a horse"）即可。
+
+## 贡献者
+
+感谢以下成员对本项目做出的贡献：
+
+<a href="https://github.com/BAO-Hongzhen/Syntax_Roulette/graphs/contributors">
+
+  <img src="https://contrib.rocks/image?repo=BAO-Hongzhen/Syntax_Roulette" alt="contrib.rocks image" />
+
+</a>
 
 ## 许可证
 
