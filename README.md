@@ -1,79 +1,95 @@
-# 剪纸大师 (Papercraft Maestro)
+# Papercraft Maestro
 
-**Papercraft Maestro** 是一个基于 AI 技术的中国传统剪纸艺术生成平台。本项目采用 **Streamlit** 构建交互式前端，结合 **Flux 图像生成模型** 与传统的图像处理算法，能够将用户简单的创意描述瞬间转化为精美的红色剪纸图案，并提供多种场景的模拟展示。
+[English](README.md) | [中文](README_zh.md)
 
-本项目是 **SD5913 Group Project** 的成果。
+[](https://www.python.org/downloads/)
+[](https://streamlit.io/)
+[](https://github.com/comfyanonymous/ComfyUI)
 
-## 主要功能
+**Papercraft Maestro** is an AI-powered platform for generating traditional Chinese paper cutting art. Built with **Streamlit** for an interactive frontend, it combines the **Flux image generation model** with traditional image processing algorithms to instantly transform simple creative descriptions into exquisite red paper cut patterns, offering various scene simulations for preview.
 
-  * **AI 智能生成**: 利用 ComfyUI 后端和 Flux 模型生成高质量剪纸图像。
-  * **全版本自动连接 (Auto-Connect)**:
-      * **零配置启动**: 无论您使用的是 **ComfyUI 标准版 (Web)**、**ComfyUI Desktop (桌面版)** 还是 **ComfyUI Portable (便携版)**，系统都能自动识别并连接。
-      * **智能扫描**: 自动扫描本地环境中的常用端口（如 8188, 8000, 8189, 3000 等），无需手动修改配置文件。
-  * **智能提示词系统**: **无需学习复杂的 Prompt！** 我们已内置经过精心调试的风格化提示词。用户只需输入想要生成的**主体**（例如："a rabbit" 或 "a dragon"），系统会自动补充“中国传统剪纸”、“红色纸张”、“复杂纹样”等风格描述。
-  * **自动工艺处理**: 内置图像处理管线（去饱和、高对比度增强、智能去底、中国红着色），模拟真实剪纸的视觉效果。
-  * **场景模拟 (Mockup)**: 支持将生成的剪纸一键合成到窗花、墙壁、门饰等真实场景中，预览实际装饰效果。
-  * **便捷下载**: 支持生成的高清剪纸原图及场景合成图的下载。
+This project is a result of the **SD5913 Group Project**.
 
-## 技术架构
+-----
 
-  * **前端**: Streamlit (Python Web Framework)
-  * **后端/AI**: ComfyUI (API Mode) + Flux.1-dev 模型 + LoRA
-  * **图像处理**: Pillow (PIL), NumPy
+## Demo
 
-## 核心技术解析
+![](readmedoc/Papercraft%20Maestro%20-%20Google%20Chrome.gif)
 
-本项目通过两个核心模块实现了从 AI 生成到最终视觉呈现的自动化流程：
+-----
 
-### 1\. 图像后期处理 (Image\_Processing.py)
+## Key Features
 
-该模块利用 **Pillow (PIL)** 和 **NumPy** 对 AI 生成的初始图像进行一系列计算机视觉处理，以模拟真实的剪纸质感：
+  * **AI Smart Generation**: Utilizes ComfyUI backend and Flux model to generate high-quality paper cut images.
+  * **Auto-Connect**:
+      * **Zero Configuration**: Whether you are using **ComfyUI Standard (Web)**, **ComfyUI Desktop**, or **ComfyUI Portable**, the system automatically identifies and connects.
+      * **Smart Scanning**: Automatically scans common ports in the local environment (e.g., 8188, 8000, 8189, 3000, etc.), eliminating the need for manual configuration files.
+  * **Smart Prompt System**: **No need to learn complex Prompts!** We have built-in carefully tuned stylized prompts. Users only need to input the **subject** they want to generate (e.g., "a rabbit" or "a dragon"), and the system automatically adds style descriptions like "traditional Chinese paper cut", "red paper", "complex patterns", etc.
+  * **Automatic Craft Processing**: Built-in image processing pipeline (desaturation, high contrast enhancement, smart background removal, Chinese red coloring) to simulate the visual effect of real paper cuts.
+  * **Scene Simulation (Mockup)**: Supports one-click synthesis of generated paper cuts into real scenes like windows, walls, and door decorations to preview the actual decorative effect.
+  * **Easy Download**: Supports downloading high-definition original paper cut images and scene synthesis images.
 
-  * **去饱和与对比度增强**: 使用 `ImageEnhance` 对生成的图像进行去色处理，并大幅提升对比度，确保剪纸纹理的清晰度。
-  * **智能去底 (Alpha Masking)**: 将图像转换为 NumPy 数组，通过像素级阈值（Thresholding）检测白色背景区域，并将其 Alpha 通道设为透明，实现高精度的自动抠图。
-  * **矢量化着色**: 实现了 `convert_to_red` 函数，将非透明的像素点统一映射为标准的“中国红”色值，同时保留原有的透明度层级，使边缘过渡自然。
-  * **场景合成**: 使用 **Lanczos 重采样**算法高质量缩放剪纸图像，根据预设的坐标系统将剪纸精确贴合到窗户、墙壁或门等背景图中。
+## Core Technology Analysis
 
-### 2\. ComfyUI 自动化接口 (ComfyUI\_api.py)
+This project implements an automated process from AI generation to final visual presentation through two core modules:
 
-该模块封装了与 ComfyUI 后端的通信逻辑，实现了零配置的连接体验：
+### 1. Image Post-Processing (Image_Processing.py)
 
-  * **端口自动发现机制**: 内置了 `find_comfyui_address` 函数，利用 Python 的 `socket` 库快速扫描本地常用端口（包括 Web 版默认的 8188、桌面版的 8000 以及其他备用端口）。一旦 TCP 连接建立，立即发送 HTTP 请求验证 `/system_stats` 端点，确保服务可用。
-  * **动态工作流注入**: 系统加载 JSON 格式的工作流模板，在内存中动态修改 `CLIPTextEncodeFlux` 节点的输入参数，将用户的提示词与内置风格词（Prompt Template）拼接。
-  * **任务队列管理**: 通过 API 将生成任务推送到 ComfyUI 队列，并实时轮询生成状态，直到获取最终生成的图像数据流。
+This module uses **Pillow (PIL)** and **NumPy** to perform a series of computer vision processing on the initial AI-generated images to simulate real paper cut texture:
 
-## 快速开始
+  * **Desaturation & Contrast Enhancement**: Uses `ImageEnhance` to desaturate the generated image and significantly increase contrast to ensure the clarity of paper cut textures.
+  * **Smart Background Removal (Alpha Masking)**: Converts the image to a NumPy array, detects white background areas via pixel-level thresholding, and sets their Alpha channel to transparent, achieving high-precision automatic matting.
+  * **Vectorized Coloring**: Implements the `convert_to_red` function to map non-transparent pixels to standard "Chinese Red" color values while preserving original transparency levels for natural edge transitions.
+  * **Scene Synthesis**: Uses **Lanczos resampling** algorithm to high-quality scale paper cut images and accurately fit them onto background images like windows, walls, or doors based on a preset coordinate system.
 
-### 1\. 环境准备
+### 2. ComfyUI Automation Interface (ComfyUI_api.py)
 
-确保你的电脑上安装了 Python 3.8+ 以及 Git。
+This module encapsulates communication logic with the ComfyUI backend, achieving a zero-configuration connection experience:
 
-克隆项目到本地：
+  * **Port Auto-Discovery Mechanism**: Built-in `find_comfyui_address` function uses Python's `socket` library to quickly scan local common ports (including Web default 8188, Desktop 8000, and other backup ports). Once a TCP connection is established, it immediately sends an HTTP request to verify the `/system_stats` endpoint to ensure service availability.
+  * **Dynamic Workflow Injection**: The system loads the JSON format workflow template and dynamically modifies the input parameters of the `CLIPTextEncodeFlux` node in memory, concatenating user prompts with built-in style words (Prompt Template).
+  * **Task Queue Management**: Pushes generation tasks to the ComfyUI queue via API and polls generation status in real-time until the final generated image data stream is obtained.
+
+## Hardware Requirements
+
+Since this project uses the Flux.1-dev (FP8) model, please ensure your hardware meets the following requirements:
+
+  * **GPU**: NVIDIA Graphics Card, VRAM ≥ 8GB (12GB+ recommended for faster speed).
+  * **RAM**: 16GB or higher.
+  * **Disk Space**: Reserve at least 20GB of space for storing model files.
+
+## Quick Start
+
+### 1. Environment Preparation
+
+Ensure Python 3.8+ and Git are installed on your computer.
+
+Clone the project locally:
 
 ```bash
 git clone [repository_url]
 cd Syntax_Roulette
 ```
 
-### 2\. 安装 Python 依赖
+### 2. Install Python Dependencies
 
-建议使用虚拟环境：
+Using a virtual environment is recommended:
 
 ```bash
-# 创建并激活虚拟环境
+# Create and activate virtual environment
 python -m venv .venv
 source .venv/bin/activate  # macOS/Linux
 # .venv\Scripts\activate   # Windows
 
-# 安装依赖
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3\. 配置 ComfyUI (关键步骤)
+### 3. Configure ComfyUI (Critical Step)
 
-本项目依赖本地运行的 ComfyUI 服务。请确保你已安装 ComfyUI 并下载了以下必要的模型文件，放置在 ComfyUI 对应的目录下：
+This project relies on a locally running ComfyUI service. Please ensure you have installed ComfyUI and downloaded the following necessary model files, placing them in the corresponding ComfyUI directories:
 
-| 模型类型 | 文件名 | 下载链接 (示例) | 存放路径 (ComfyUI根目录起) |
+| Model Type | Filename | Download Link (Example) | Path (from ComfyUI root) |
 | :--- | :--- | :--- | :--- |
 | **UNET (Flux)** | `flux1-dev-fp8.safetensors` | [HuggingFace](https://huggingface.co/Kijai/flux-fp8/blob/main/flux1-dev-fp8.safetensors) | `models/diffusion_models/` |
 | **CLIP** | `clip_l.safetensors` | [HuggingFace](https://huggingface.co/comfyanonymous/flux_text_encoders/blob/main/clip_l.safetensors) | `models/clip/` |
@@ -81,75 +97,63 @@ pip install -r requirements.txt
 | **VAE** | `ae.safetensors` | [HuggingFace](https://www.google.com/search?q=https://huggingface.co/black-forest-labs/FLUX.1-schnell/blob/main/ae.safetensors) | `models/vae/` |
 | **LoRA** | `大觉新春剪纸_V1.safetensors` | [Google Drive](https://drive.google.com/file/d/1eXedHyMzIk0YYvr7jLChjj7yMlRA_dUA/view?usp=sharing) | `models/loras/` |
 
-> **注意**: 如果你的模型文件名与上述不同，请修改 `ComfyUI_Workflow/paper_cut.json` 文件中对应的节点名称。
+> **Note**: If your model filenames differ from the above, please modify the corresponding node names in the `ComfyUI_Workflow/paper_cut.json` file.
 
-### 4\. 启动服务
+### 4. Start Service
 
-**第一步：启动 ComfyUI**
-无论是 Web 版、桌面版还是便携版，只要启动服务即可。无需关心具体的端口号。
+**Step 1: Start ComfyUI**
+Whether it's the Web version, Desktop version, or Portable version, just start the service. No need to worry about specific port numbers.
 
-**第二步：启动剪纸大师应用**
+**Step 2: Start Papercraft Maestro App**
 
-在项目根目录下运行：
+Run in the project root directory:
 
 ```bash
 streamlit run main.py
 ```
 
-启动成功后，浏览器会自动打开应用的访问地址（通常为 `http://localhost:8501`）。终端会显示类似 `✅ 发现 ComfyUI 服务于: http://127.0.0.1:xxxx` 的成功连接信息。
+After successful startup, the browser will automatically open the app access address (usually `http://localhost:8501`). The terminal will display a success connection message like `✅ Found ComfyUI service at: http://127.0.0.1:xxxx`.
 
-## 使用指南
+## User Guide
 
-1.  **输入创意**: 在输入框中简单描述你想要生成的物体（建议使用英文，例如 `tiger`、`flower`、`superman`）。
-      * *提示：你不需要输入“red paper cut style”等词汇，系统会自动添加。*
-2.  **生成 (Generate)**: 点击 **GENERATE** 按钮。
-      * **首次生成**: 大约需要 **70-90 秒**（需要加载模型到显存）。
-      * **后续生成**: 大约需要 **40-60 秒**（取决于显卡性能）。
-3.  **结果预览**: 生成完成后，你将看到处理好的红色剪纸图案。你可以点击 **Download PNG** 下载原图。
-4.  **场景渲染 (Render in Scene)**:
-      * 在右侧选择想要模拟的场景（Window, Wall, Door）。
-      * 点击 **RENDER IN SCENE** 按钮。
-      * 预览剪纸贴在真实场景中的效果并下载。
+1.  **Input Idea**: Simply describe the object you want to generate in the input box (English recommended, e.g., `tiger`, `flower`, `superman`).
+      * *Tip: You don't need to input words like "red paper cut style", the system adds them automatically.*
+2.  **Generate**: Click the **GENERATE** button.
+      * **First Generation**: Takes about **70-90 seconds** (needs to load model into VRAM).
+      * **Subsequent Generations**: Takes about **40-60 seconds** (depending on GPU performance).
+3.  **Result Preview**: After generation is complete, you will see the processed red paper cut pattern. You can click **Download PNG** to download the original image.
+4.  **Render in Scene**:
+      * Select the scene you want to simulate on the right (Window, Wall, Door).
+      * Click the **RENDER IN SCENE** button.
+      * Preview the effect of the paper cut pasted in the real scene and download.
 
-## 项目结构
+## Project Structure
 
 ```
-Syntax_Roulette/
-├── main.py                     # Streamlit 应用主入口
-├── ComfyUI_api.py              # ComfyUI API 适配器（含多版本端口自动扫描逻辑）
-├── Image_Processing.py         # 图像后期处理算法 (去底、上色、合成)
-├── requirements.txt            # 项目依赖列表
-├── ComfyUI_Workflow/
-│   └── paper_cut.json          # ComfyUI 工作流配置文件
-├── Assets/                     # 静态资源
-│   ├── Prototype_Images/       # 场景底图 (Window, Wall, Door)
-│   └── UI _Images/             # UI 装饰素材
-├── output/                     # 存放生成的原始剪纸图片
-└── image_in_scene/             # 存放场景合成后的图片
+Papercraft_Maestro/
+├── main.py                     # Streamlit App Entry Point
+├── comfy_api.py                # ComfyUI API Adapter (with multi-version port auto-scan logic)
+├── Image_Processing.py         # Image Post-Processing Algorithms (Background Removal, Coloring, Synthesis)
+├── requirements.txt            # Project Dependencies List
+├── comfyui_workflow/
+│   └── paper_cut.json          # ComfyUI Workflow Configuration File
+├── ui_assets/                  # Static Assets
+│   ├── background/             # Streamlit Background Images
+│   └── prototype_images/       # Scene Prototype Images (Window, Wall, Door, etc.)
+├── image_raw/                  # Stores Generated Raw Paper Cut Images
+├── image_processed/            # Stores Processed Images
+├── image_rendered/             # Stores Scene Synthesized Images
+└── previous_work/              # Previous Tests and Attempts
 ```
 
-## 常见问题
+## Contributors
 
-**Q: 为什么我的 ComfyUI 是便携版，端口不是 8188 也能连上？**
-A: 因为我们的 `ComfyUI_api.py` 模块内置了端口扫描功能，它会尝试连接 8188, 8000, 8189, 3000 等一系列常用端口，直到找到可用的 ComfyUI 服务。
-
-**Q: 生成速度感觉比较慢？**
-A: Flux 是一个较大的模型，对硬件资源要求较高。
-
-  * **首次启动**时需要加载模型，通常需要 **70-90秒**。
-  * **模型加载后**，生成速度会提升至 **40-60秒** 左右（具体取决于您的 GPU 显存和计算能力）。
-
-**Q: 我需要写 "Chinese paper cut style" 吗？**
-A: **不需要**。我们的系统已经内置了最佳的风格化提示词（"A vibrant red Chinese paper..."）。你只需要告诉系统“画什么”（例如 "a horse"）即可。
-
-## 贡献者
-
-感谢以下成员对本项目做出的贡献：
+Thanks to the following members for their contributions to this project:
 
 <a href="https://github.com/BAO-Hongzhen/Papercraft_Maestro/graphs/contributors">
  <img src="https://contrib.rocks/image?repo=BAO-Hongzhen/Papercraft_Maestro" alt="contrib.rocks image" />
 </a>
 
-## 许可证
+## License
 
-本项目仅供学习与研究使用。所使用的 AI 模型及 LoRA 遵循其各自的许可协议。
+This project is for learning and research purposes only. The AI models and LoRA used follow their respective license agreements.

@@ -1,13 +1,11 @@
-# 剪纸大师 (Papercraft Maestro) - Python 依赖
-
-# Web 框架
+# Web Framework
 streamlit
 
-# 图像处理
+# Image Processing
 Pillow
 numpy
 
-# ComfyUI 相关
+# ComfyUI related
 requests
 websocket-client
 comfy_api_simplified
