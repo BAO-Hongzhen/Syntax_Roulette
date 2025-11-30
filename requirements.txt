@@ -2,15 +2,12 @@
 
 # Web 框架
 streamlit
-Flask==3.0.0
-Werkzeug==3.0.1
 
 # 图像处理
-Pillow==10.1.0
+Pillow
 numpy
 
 # ComfyUI 相关
-requests==2.31.0
-websocket-client==1.6.1
+requests
+websocket-client
 comfy_api_simplified
-websockets
